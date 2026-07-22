@@ -2,7 +2,7 @@
 
 RSpec.describe ImGui do
   it "exposes the gem version" do
-    expect(ImGui::VERSION).to eq("0.1.0")
+    expect(ImGui::VERSION).to eq("1.0.0")
   end
 
   it "loads generated enums and structs without loading the shared library" do
