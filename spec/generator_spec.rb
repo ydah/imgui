@@ -32,6 +32,9 @@ RSpec.describe ImGuiRuby::Generator::Emitter do
       expect(File.read(File.join(output, "enums.rb"))).to include("DockingEnable = Native::ImGuiConfigFlags_DockingEnable")
       expect(File.read(File.join(output, "structs.rb"))).to include('"values[2]", [:float, 2]')
       expect(File.read(File.join(output, "typedefs.rb"))).to include("typedef :uint, :ImGuiID")
+      expect(File.read(File.join(output, "typedefs.rb"))).to include(
+        "callback :ImGuiInputTextCallback, [:pointer], :int"
+      )
     end
   end
 end

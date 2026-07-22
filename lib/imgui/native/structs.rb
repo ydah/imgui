@@ -121,9 +121,15 @@ module ImGui
     class ImVec2 < FFI::Struct; end
     class ImVec2ih < FFI::Struct; end
     class ImVec4 < FFI::Struct; end
+    class ImVector < FFI::Struct; end
 
+    ImVector.layout(
+        "Size", :int,
+        "Capacity", :int,
+        "Data", :pointer
+    )
     ImBitVector.layout(
-        "Storage", :pointer
+        "Storage", ImVector.by_value
     )
     ImVec4.layout(
         "x", :float,
@@ -135,8 +141,8 @@ module ImGui
         "Value", ImVec4.by_value
     )
     ImDrawChannel.layout(
-        "_CmdBuffer", :pointer,
-        "_IdxBuffer", :pointer
+        "_CmdBuffer", ImVector.by_value,
+        "_IdxBuffer", ImVector.by_value
     )
     ImDrawCmd.layout(
         "ClipRect", ImVec4.by_value,
@@ -144,7 +150,7 @@ module ImGui
         "VtxOffset", :uint,
         "IdxOffset", :uint,
         "ElemCount", :uint,
-        "UserCallback", :pointer,
+        "UserCallback", :ImDrawCallback,
         "UserCallbackData", :pointer,
         "UserCallbackDataSize", :int,
         "UserCallbackDataOffset", :int
@@ -163,7 +169,7 @@ module ImGui
         "CmdListsCount", :int,
         "TotalIdxCount", :int,
         "TotalVtxCount", :int,
-        "CmdLists", :pointer,
+        "CmdLists", ImVector.by_value,
         "DisplayPos", ImVec2.by_value,
         "DisplaySize", ImVec2.by_value,
         "FramebufferScale", ImVec2.by_value,
@@ -171,28 +177,28 @@ module ImGui
     )
     ImDrawDataBuilder.layout(
         "Layers[2]", [:pointer, 2],
-        "LayerData1", :pointer
+        "LayerData1", ImVector.by_value
     )
     ImDrawListSplitter.layout(
         "_Current", :int,
         "_Count", :int,
-        "_Channels", :pointer
+        "_Channels", ImVector.by_value
     )
     ImDrawList.layout(
-        "CmdBuffer", :pointer,
-        "IdxBuffer", :pointer,
-        "VtxBuffer", :pointer,
+        "CmdBuffer", ImVector.by_value,
+        "IdxBuffer", ImVector.by_value,
+        "VtxBuffer", ImVector.by_value,
         "Flags", :int,
         "_VtxCurrentIdx", :uint,
         "_Data", :pointer,
         "_VtxWritePtr", :pointer,
         "_IdxWritePtr", :pointer,
-        "_Path", :pointer,
+        "_Path", ImVector.by_value,
         "_CmdHeader", ImDrawCmdHeader.by_value,
         "_Splitter", ImDrawListSplitter.by_value,
-        "_ClipRectStack", :pointer,
-        "_TextureIdStack", :pointer,
-        "_CallbacksDataBuf", :pointer,
+        "_ClipRectStack", ImVector.by_value,
+        "_TextureIdStack", ImVector.by_value,
+        "_CallbacksDataBuf", ImVector.by_value,
         "_FringeScale", :float,
         "_OwnerName", :pointer
     )
@@ -207,7 +213,7 @@ module ImGui
         "InitialFringeScale", :float,
         "InitialFlags", :int,
         "ClipRectFullscreen", ImVec4.by_value,
-        "TempBuffer", :pointer,
+        "TempBuffer", ImVector.by_value,
         "ArcFastVtx[48]", [ImVec2.by_value, 48],
         "ArcFastRadiusCutoff", :float,
         "CircleSegmentCounts[64]", [:uchar, 64]
@@ -218,11 +224,11 @@ module ImGui
         "col", :uint
     )
     ImFont.layout(
-        "IndexAdvanceX", :pointer,
+        "IndexAdvanceX", ImVector.by_value,
         "FallbackAdvanceX", :float,
         "FontSize", :float,
-        "IndexLookup", :pointer,
-        "Glyphs", :pointer,
+        "IndexLookup", ImVector.by_value,
+        "Glyphs", ImVector.by_value,
         "FallbackGlyph", :pointer,
         "ContainerAtlas", :pointer,
         "Sources", :pointer,
@@ -254,9 +260,9 @@ module ImGui
         "TexHeight", :int,
         "TexUvScale", ImVec2.by_value,
         "TexUvWhitePixel", ImVec2.by_value,
-        "Fonts", :pointer,
-        "CustomRects", :pointer,
-        "Sources", :pointer,
+        "Fonts", ImVector.by_value,
+        "CustomRects", ImVector.by_value,
+        "Sources", ImVector.by_value,
         "TexUvLines[(32)+1]", [ImVec4.by_value, 33],
         "FontBuilderIO", :pointer,
         "FontBuilderFlags", :uint,
@@ -311,7 +317,7 @@ module ImGui
         "V1", :float
     )
     ImFontGlyphRangesBuilder.layout(
-        "UsedChars", :pointer
+        "UsedChars", ImVector.by_value
     )
     ImRect.layout(
         "Min", ImVec2.by_value,
@@ -461,7 +467,7 @@ module ImGui
         "AppFocusLost", :bool,
         "AppAcceptingEvents", :bool,
         "InputQueueSurrogate", :ushort,
-        "InputQueueCharacters", :pointer
+        "InputQueueCharacters", ImVector.by_value
     )
     ImGuiPlatformIO.layout(
         "Platform_GetClipboardTextFn", :pointer,
@@ -497,8 +503,8 @@ module ImGui
         "Renderer_SetWindowSize", :pointer,
         "Renderer_RenderWindow", :pointer,
         "Renderer_SwapBuffers", :pointer,
-        "Monitors", :pointer,
-        "Viewports", :pointer
+        "Monitors", ImVector.by_value,
+        "Viewports", ImVector.by_value
     )
     ImGuiStyle.layout(
         "Alpha", :float,
@@ -560,7 +566,7 @@ module ImGui
         "HoverFlagsForTooltipNav", :int
     )
     ImGuiStorage.layout(
-        "Data", :pointer
+        "Data", ImVector.by_value
     )
     ImGuiDeactivatedItemData.layout(
         "ID", :uint,
@@ -579,8 +585,8 @@ module ImGui
     )
     ImGuiKeyRoutingTable.layout(
         "Index[ImGuiKey_NamedKey_COUNT]", [:pointer, 155],
-        "Entries", :pointer,
-        "EntriesNext", :pointer
+        "Entries", ImVector.by_value,
+        "EntriesNext", ImVector.by_value
     )
     ImGuiNextItemData.layout(
         "HasFlags", :int,
@@ -632,7 +638,7 @@ module ImGui
         "PosUndock", :bool,
         "CollapsedVal", :bool,
         "SizeConstraintRect", ImRect.by_value,
-        "SizeCallback", :pointer,
+        "SizeCallback", :ImGuiSizeCallback,
         "SizeCallbackUserData", :pointer,
         "BgAlphaVal", :float,
         "ViewportId", :uint,
@@ -677,9 +683,9 @@ module ImGui
         "ID", :uint,
         "TextLen", :int,
         "TextSrc", :pointer,
-        "TextA", :pointer,
-        "TextToRevertTo", :pointer,
-        "CallbackTextBackup", :pointer,
+        "TextA", ImVector.by_value,
+        "TextToRevertTo", ImVector.by_value,
+        "CallbackTextBackup", ImVector.by_value,
         "BufCapacity", :int,
         "Scroll", ImVec2.by_value,
         "CursorAnim", :float,
@@ -692,7 +698,7 @@ module ImGui
     )
     ImGuiInputTextDeactivatedState.layout(
         "ID", :uint,
-        "TextA", :pointer
+        "TextA", ImVector.by_value
     )
     ImGuiTypingSelectRequest.layout(
         "Flags", :int,
@@ -717,12 +723,12 @@ module ImGui
     )
     ImGuiDockContext.layout(
         "Nodes", ImGuiStorage.by_value,
-        "Requests", :pointer,
-        "NodesSettings", :pointer,
+        "Requests", ImVector.by_value,
+        "NodesSettings", ImVector.by_value,
         "WantFullRebuild", :bool
     )
     ImGuiTextBuffer.layout(
-        "Buf", :pointer
+        "Buf", ImVector.by_value
     )
     ImGuiErrorRecoveryState.layout(
         "SizeOfWindowStack", :short,
@@ -738,7 +744,7 @@ module ImGui
         "SizeOfDisabledStack", :short
     )
     ImGuiTextIndex.layout(
-        "LineOffsets", :pointer,
+        "LineOffsets", ImVector.by_value,
         "EndOffset", :int
     )
     ImGuiMetricsConfig.layout(
@@ -760,7 +766,7 @@ module ImGui
         "LastActiveFrame", :int,
         "StackLevel", :int,
         "QueryId", :uint,
-        "Results", :pointer,
+        "Results", ImVector.by_value,
         "CopyToClipboardOnCtrlC", :bool,
         "CopyToClipboardLastTime", :float,
         "ResultPathBuf", ImGuiTextBuffer.by_value
@@ -802,14 +808,14 @@ module ImGui
         "TestEngineHookItems", :bool,
         "TestEngine", :pointer,
         "ContextName[16]", [:char, 16],
-        "InputEventsQueue", :pointer,
-        "InputEventsTrail", :pointer,
+        "InputEventsQueue", ImVector.by_value,
+        "InputEventsTrail", ImVector.by_value,
         "InputEventsNextMouseSource", :int,
         "InputEventsNextEventId", :uint,
-        "Windows", :pointer,
-        "WindowsFocusOrder", :pointer,
-        "WindowsTempSortBuffer", :pointer,
-        "CurrentWindowStack", :pointer,
+        "Windows", ImVector.by_value,
+        "WindowsFocusOrder", ImVector.by_value,
+        "WindowsTempSortBuffer", ImVector.by_value,
+        "CurrentWindowStack", ImVector.by_value,
         "WindowsById", ImGuiStorage.by_value,
         "WindowsActiveCount", :int,
         "WindowsBorderHoverPadding", :float,
@@ -872,16 +878,16 @@ module ImGui
         "NextWindowData", ImGuiNextWindowData.by_value,
         "DebugShowGroupRects", :bool,
         "DebugFlashStyleColorIdx", :int,
-        "ColorStack", :pointer,
-        "StyleVarStack", :pointer,
-        "FontStack", :pointer,
-        "FocusScopeStack", :pointer,
-        "ItemFlagsStack", :pointer,
-        "GroupStack", :pointer,
-        "OpenPopupStack", :pointer,
-        "BeginPopupStack", :pointer,
-        "TreeNodeStack", :pointer,
-        "Viewports", :pointer,
+        "ColorStack", ImVector.by_value,
+        "StyleVarStack", ImVector.by_value,
+        "FontStack", ImVector.by_value,
+        "FocusScopeStack", ImVector.by_value,
+        "ItemFlagsStack", ImVector.by_value,
+        "GroupStack", ImVector.by_value,
+        "OpenPopupStack", ImVector.by_value,
+        "BeginPopupStack", ImVector.by_value,
+        "TreeNodeStack", ImVector.by_value,
+        "Viewports", ImVector.by_value,
         "CurrentViewport", :pointer,
         "MouseViewport", :pointer,
         "MouseLastHoveredViewport", :pointer,
@@ -903,7 +909,7 @@ module ImGui
         "NavActivateDownId", :uint,
         "NavActivatePressedId", :uint,
         "NavActivateFlags", :int,
-        "NavFocusRoute", :pointer,
+        "NavFocusRoute", ImVector.by_value,
         "NavHighlightActivatedId", :uint,
         "NavHighlightActivatedTimer", :float,
         "NavNextActivateId", :uint,
@@ -967,25 +973,25 @@ module ImGui
         "DragDropAcceptIdPrev", :uint,
         "DragDropAcceptFrameCount", :int,
         "DragDropHoldJustPressedId", :uint,
-        "DragDropPayloadBufHeap", :pointer,
+        "DragDropPayloadBufHeap", ImVector.by_value,
         "DragDropPayloadBufLocal[16]", [:uchar, 16],
         "ClipperTempDataStacked", :int,
-        "ClipperTempData", :pointer,
+        "ClipperTempData", ImVector.by_value,
         "CurrentTable", :pointer,
         "DebugBreakInTable", :uint,
         "TablesTempDataStacked", :int,
-        "TablesTempData", :pointer,
+        "TablesTempData", ImVector.by_value,
         "Tables", :pointer,
-        "TablesLastTimeActive", :pointer,
-        "DrawChannelsTempMergeBuffer", :pointer,
+        "TablesLastTimeActive", ImVector.by_value,
+        "DrawChannelsTempMergeBuffer", ImVector.by_value,
         "CurrentTabBar", :pointer,
         "TabBars", :pointer,
-        "CurrentTabBarStack", :pointer,
-        "ShrinkWidthBuffer", :pointer,
+        "CurrentTabBarStack", ImVector.by_value,
+        "ShrinkWidthBuffer", ImVector.by_value,
         "BoxSelectState", ImGuiBoxSelectState.by_value,
         "CurrentMultiSelect", :pointer,
         "MultiSelectTempDataStacked", :int,
-        "MultiSelectTempData", :pointer,
+        "MultiSelectTempData", ImVector.by_value,
         "MultiSelectStorage", :pointer,
         "HoverItemDelayId", :uint,
         "HoverItemDelayIdPreviousFrame", :uint,
@@ -1025,8 +1031,8 @@ module ImGui
         "DisabledStackSize", :short,
         "TooltipOverrideCount", :short,
         "TooltipPreviousWindow", :pointer,
-        "ClipboardHandlerData", :pointer,
-        "MenusIdSubmittedThisFrame", :pointer,
+        "ClipboardHandlerData", ImVector.by_value,
+        "MenusIdSubmittedThisFrame", ImVector.by_value,
         "TypingSelectState", ImGuiTypingSelectState.by_value,
         "PlatformImeData", ImGuiPlatformImeData.by_value,
         "PlatformImeDataPrev", ImGuiPlatformImeData.by_value,
@@ -1036,10 +1042,10 @@ module ImGui
         "SettingsLoaded", :bool,
         "SettingsDirtyTimer", :float,
         "SettingsIniData", ImGuiTextBuffer.by_value,
-        "SettingsHandlers", :pointer,
+        "SettingsHandlers", ImVector.by_value,
         "SettingsWindows", :pointer,
         "SettingsTables", :pointer,
-        "Hooks", :pointer,
+        "Hooks", ImVector.by_value,
         "HookIdNext", :uint,
         "LocalizationTable[ImGuiLocKey_COUNT]", [:pointer, 13],
         "LogEnabled", :bool,
@@ -1054,7 +1060,7 @@ module ImGui
         "LogDepthRef", :int,
         "LogDepthToExpand", :int,
         "LogDepthToExpandDefault", :int,
-        "ErrorCallback", :pointer,
+        "ErrorCallback", :ImGuiErrorCallback,
         "ErrorCallbackUserData", :pointer,
         "ErrorTooltipLockedPos", ImVec2.by_value,
         "ErrorFirst", :bool,
@@ -1088,14 +1094,14 @@ module ImGui
         "WantCaptureMouseNextFrame", :int,
         "WantCaptureKeyboardNextFrame", :int,
         "WantTextInputNextFrame", :int,
-        "TempBuffer", :pointer,
+        "TempBuffer", ImVector.by_value,
         "TempKeychordName[64]", [:char, 64]
     )
     ImGuiContextHook.layout(
         "HookId", :uint,
         "Type", :int,
         "Owner", :uint,
-        "Callback", :pointer,
+        "Callback", :ImGuiContextHookCallback,
         "UserData", :pointer
     )
     ImGuiDataTypeInfo.layout(
@@ -1113,7 +1119,7 @@ module ImGui
         "State", :int,
         "ParentNode", :pointer,
         "ChildNodes[2]", [:pointer, 2],
-        "Windows", :pointer,
+        "Windows", ImVector.by_value,
         "TabBar", :pointer,
         "Pos", ImVec2.by_value,
         "Size", ImVec2.by_value,
@@ -1232,7 +1238,7 @@ module ImGui
         "LossynessOffset", :float,
         "StepNo", :int,
         "ItemsFrozen", :int,
-        "Ranges", :pointer
+        "Ranges", ImVector.by_value
     )
     ImGuiListClipperRange.layout(
         "Min", :int,
@@ -1256,7 +1262,7 @@ module ImGui
         "Widths[4]", [:ushort, 4]
     )
     ImGuiMultiSelectIO.layout(
-        "Requests", :pointer,
+        "Requests", ImVector.by_value,
         "RangeSrcItem", :pointer,
         "NavIdItem", :pointer,
         "NavIdSelected", :bool,
@@ -1313,7 +1319,7 @@ module ImGui
         "HostInitialClipRect", ImRect.by_value,
         "HostBackupClipRect", ImRect.by_value,
         "HostBackupParentWorkRect", ImRect.by_value,
-        "Columns", :pointer,
+        "Columns", ImVector.by_value,
         "Splitter", ImDrawListSplitter.by_value
     )
     ImGuiOnceUponAFrame.layout(
@@ -1396,7 +1402,7 @@ module ImGui
     )
     ImGuiTabBar.layout(
         "Window", :pointer,
-        "Tabs", :pointer,
+        "Tabs", ImVector.by_value,
         "Flags", :int,
         "ID", :uint,
         "SelectedTabId", :uint,
@@ -1525,9 +1531,9 @@ module ImGui
         "ColumnsNames", ImGuiTextBuffer.by_value,
         "DrawSplitter", :pointer,
         "InstanceDataFirst", ImGuiTableInstanceData.by_value,
-        "InstanceDataExtra", :pointer,
+        "InstanceDataExtra", ImVector.by_value,
         "SortSpecsSingle", ImGuiTableColumnSortSpecs.by_value,
-        "SortSpecsMulti", :pointer,
+        "SortSpecsMulti", ImVector.by_value,
         "SortSpecs", ImGuiTableSortSpecs.by_value,
         "SortSpecsCount", :pointer,
         "ColumnsEnabledCount", :pointer,
@@ -1652,7 +1658,7 @@ module ImGui
         "TableIndex", :int,
         "LastTimeActive", :float,
         "AngledHeadersExtraWidth", :float,
-        "AngledHeadersRequests", :pointer,
+        "AngledHeadersRequests", ImVector.by_value,
         "UserOuterSize", ImVec2.by_value,
         "DrawSplitter", ImDrawListSplitter.by_value,
         "HostBackupWorkRect", ImRect.by_value,
@@ -1666,7 +1672,7 @@ module ImGui
     )
     ImGuiTextFilter.layout(
         "InputBuf[256]", [:char, 256],
-        "Filters", :pointer,
+        "Filters", ImVector.by_value,
         "CountGrep", :int
     )
     ImGuiTextRange.layout(
@@ -1750,7 +1756,7 @@ module ImGui
         "MenuColumns", ImGuiMenuColumns.by_value,
         "TreeDepth", :int,
         "TreeHasStackDataDepthMask", :uint,
-        "ChildWindows", :pointer,
+        "ChildWindows", ImVector.by_value,
         "StateStorage", :pointer,
         "CurrentColumns", :pointer,
         "CurrentTableIdx", :int,
@@ -1763,8 +1769,8 @@ module ImGui
         "DockTabItemRect", ImRect.by_value,
         "ItemWidth", :float,
         "TextWrapPos", :float,
-        "ItemWidthStack", :pointer,
-        "TextWrapPosStack", :pointer
+        "ItemWidthStack", ImVector.by_value,
+        "TextWrapPosStack", ImVector.by_value
     )
     ImVec2ih.layout(
         "x", :short,
@@ -1848,7 +1854,7 @@ module ImGui
         "_bitfield_1", :int,
         "SetWindowPosVal", ImVec2.by_value,
         "SetWindowPosPivot", ImVec2.by_value,
-        "IDStack", :pointer,
+        "IDStack", ImVector.by_value,
         "DC", ImGuiWindowTempData.by_value,
         "OuterRectClipped", ImRect.by_value,
         "InnerRect", ImRect.by_value,
@@ -1864,7 +1870,7 @@ module ImGui
         "LastTimeActive", :float,
         "ItemWidthDefault", :float,
         "StateStorage", ImGuiStorage.by_value,
-        "ColumnsStorage", :pointer,
+        "ColumnsStorage", ImVector.by_value,
         "FontWindowScale", :float,
         "FontWindowScaleParents", :float,
         "FontDpiScale", :float,

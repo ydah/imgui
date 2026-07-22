@@ -25,6 +25,8 @@ module ImGuiRuby
         @types = read_json("structs_and_enums.json")
         @typedefs = read_json("typedefs_dict.json")
         @structs = @types.fetch("structs")
+        vector_layout = @types.fetch("templated_structs", {})["ImVector"]
+        @structs["ImVector"] = vector_layout if vector_layout
         @enums = @types.fetch("enums")
         @mapper = TypeMapper.new(
           typedefs: @typedefs,
@@ -47,7 +49,13 @@ module ImGuiRuby
         declarations = @typedefs.filter_map do |name, c_type|
           next if @structs.key?(name) || c_type.start_with?("struct ")
 
-          "    typedef #{@mapper.typedef_type(c_type)}, :#{name}"
+          callback = callback_signature(c_type)
+          if callback
+            arguments = callback.fetch(:arguments).map { |argument| @mapper.ffi_type(argument) }
+            "    callback :#{name}, [#{arguments.join(", ")}], #{@mapper.ffi_type(callback.fetch(:result))}"
+          else
+            "    typedef #{@mapper.typedef_type(c_type)}, :#{name}"
+          end
         end
 
         wrap_native(declarations.join("\n"))
@@ -82,6 +90,16 @@ module ImGuiRuby
           #{public_modules.join("\n\n")}
           end
         RUBY
+      end
+
+      def callback_signature(c_type)
+        match = c_type.match(/\A(.+?)\s*\(\*\)\((.*)\);?\z/)
+        return unless match
+
+        arguments = match[2] == "void" || match[2].empty? ? [] : match[2].split(",").map do |argument|
+          argument.strip.sub(/\s+[a-zA-Z_]\w*\z/, "")
+        end
+        { result: match[1].strip, arguments: arguments }
       end
 
       def emit_structs
@@ -179,7 +197,10 @@ module ImGuiRuby
         type = c_type.gsub(/\bconst\b|\bstruct\b/, "").gsub(/\[[^\]]+\]/, "").strip
         return if type.include?("*") || type.include?("&")
 
-        @structs.key?(type) ? type : nil
+        return type if @structs.key?(type)
+
+        template_base = type.split("_").first
+        @structs.key?(template_base) ? template_base : nil
       end
 
       def wrap_native(body)

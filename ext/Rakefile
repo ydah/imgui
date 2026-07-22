@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+require "rake"
+require "rbconfig"
+
+require_relative "build_cimgui"
+
+host_os = RbConfig::CONFIG.fetch("host_os")
+platform_os = if host_os.include?("darwin")
+                "darwin"
+              elsif host_os.match?(/mswin|mingw/)
+                "windows"
+              else
+                "linux"
+              end
+host_cpu = RbConfig::CONFIG.fetch("host_cpu")
+platform_cpu = host_cpu == "arm64" ? "aarch64" : host_cpu
+platform = "#{platform_cpu}-#{platform_os}"
+extension_root = ENV.fetch("RUBYARCHDIR", File.expand_path("../lib", __dir__))
+install_dir = File.join(extension_root, "imgui", "vendor", platform)
+
+desc "Build the bundled cimgui shared library"
+task :compile do
+  ImGuiRuby::NativeBuilder.new(
+    source_dir: __dir__,
+    build_dir: File.join(__dir__, "build"),
+    install_dir: install_dir
+  ).build!
+end
+
+task default: :compile

@@ -7,7 +7,7 @@ module ImGui
   module Native
     typedef :pointer, :ImBitArrayForNamedKeys
     typedef :pointer, :ImBitArrayPtr
-    typedef :pointer, :ImDrawCallback
+    callback :ImDrawCallback, [:pointer, :pointer], :void
     typedef :int, :ImDrawFlags
     typedef :ushort, :ImDrawIdx
     typedef :int, :ImDrawListFlags
@@ -22,19 +22,19 @@ module ImGui
     typedef :int, :ImGuiComboFlags
     typedef :int, :ImGuiCond
     typedef :int, :ImGuiConfigFlags
-    typedef :pointer, :ImGuiContextHookCallback
+    callback :ImGuiContextHookCallback, [:pointer, :pointer], :void
     typedef :int, :ImGuiDataAuthority
     typedef :int, :ImGuiDataType
     typedef :int, :ImGuiDebugLogFlags
     typedef :int, :ImGuiDockNodeFlags
     typedef :int, :ImGuiDragDropFlags
-    typedef :pointer, :ImGuiErrorCallback
+    callback :ImGuiErrorCallback, [:pointer, :pointer, :string], :void
     typedef :int, :ImGuiFocusRequestFlags
     typedef :int, :ImGuiFocusedFlags
     typedef :int, :ImGuiHoveredFlags
     typedef :uint, :ImGuiID
     typedef :int, :ImGuiInputFlags
-    typedef :pointer, :ImGuiInputTextCallback
+    callback :ImGuiInputTextCallback, [:pointer], :int
     typedef :int, :ImGuiInputTextFlags
     typedef :int, :ImGuiItemFlags
     typedef :int, :ImGuiItemStatusFlags
@@ -42,8 +42,8 @@ module ImGui
     typedef :pointer, :ImGuiKeyRoutingIndex
     typedef :int, :ImGuiLayoutType
     typedef :int, :ImGuiLogFlags
-    typedef :pointer, :ImGuiMemAllocFunc
-    typedef :pointer, :ImGuiMemFreeFunc
+    callback :ImGuiMemAllocFunc, [:size_t, :pointer], :pointer
+    callback :ImGuiMemFreeFunc, [:pointer, :pointer], :void
     typedef :int, :ImGuiMouseButton
     typedef :int, :ImGuiMouseCursor
     typedef :int, :ImGuiMultiSelectFlags
@@ -57,7 +57,7 @@ module ImGui
     typedef :int, :ImGuiSelectableFlags
     typedef :pointer, :ImGuiSelectionUserData
     typedef :int, :ImGuiSeparatorFlags
-    typedef :pointer, :ImGuiSizeCallback
+    callback :ImGuiSizeCallback, [:pointer], :void
     typedef :int, :ImGuiSliderFlags
     typedef :int, :ImGuiStyleVar
     typedef :int, :ImGuiTabBarFlags

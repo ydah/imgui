@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = "#{spec.homepage}/tree/main"
   spec.metadata["rubygems_mfa_required"] = "true"
 
   gemspec = File.basename(__FILE__)
@@ -23,10 +23,15 @@ Gem::Specification.new do |spec|
       file == gemspec || file.start_with?(*%w[bin/ Gemfile .gitignore .rspec spec/ .github/ .idea/])
     end
   end
+  vendored_sources = Dir.glob(
+    "generator/vendor/cimgui/{cimgui.cpp,cimgui.h,cimgui_impl.cpp,cimgui_impl.h,cimconfig.h," \
+    "imgui/{*.cpp,*.h,backends/*.{cpp,h},examples/libs/glfw/include/GLFW/*.h}}"
+  )
+  spec.files |= vendored_sources
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |file| File.basename(file) }
   spec.require_paths = ["lib"]
-  spec.extensions = ["ext/Rakefile"] if File.exist?(File.join(__dir__, "ext", "Rakefile"))
+  spec.extensions = ["ext/extconf.rb"] if File.exist?(File.join(__dir__, "ext", "extconf.rb"))
 
   spec.add_dependency "ffi", ">= 1.16", "< 2"
 end

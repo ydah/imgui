@@ -1,5 +1,6 @@
 {
   "ImGuiConfigFlags": "int",
   "ImGuiID": "unsigned int",
-  "ImGuiIO": "struct ImGuiIO"
+  "ImGuiIO": "struct ImGuiIO",
+  "ImGuiInputTextCallback": "int (*)(ImGuiIO* data);"
 }

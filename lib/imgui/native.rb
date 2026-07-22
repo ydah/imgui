@@ -102,7 +102,10 @@ module ImGui
 
       def vendored_library_candidates
         vendor_root = File.expand_path("../../vendor", __dir__)
-        platform = "#{FFI::Platform::ARCH}-#{FFI::Platform::OS}"
+        platforms = ["#{FFI::Platform::ARCH}-#{FFI::Platform::OS}"]
+        if FFI::Platform::ARCH == "aarch64"
+          platforms << "arm64-#{FFI::Platform::OS}"
+        end
         filenames = [library_filename]
         filenames << "#{LIBRARY_BASENAME}.dll" if FFI::Platform.windows?
 
@@ -113,10 +116,7 @@ module ImGui
 
         vendor_roots.uniq.flat_map do |root|
           filenames.flat_map do |filename|
-            [
-              File.join(root, platform, filename),
-              File.join(root, filename)
-            ]
+            platforms.map { |platform| File.join(root, platform, filename) } + [File.join(root, filename)]
           end
         end.select { |candidate| File.file?(candidate) }
       end

@@ -65,7 +65,11 @@ module ImGuiRuby
         return ":int" if enum_type?(bare)
         return "#{bare}.by_value" if @structs.key?(bare)
 
+        template_base = bare.split("_").first
+        return "#{template_base}.by_value" if @structs.key?(template_base)
+
         resolved = @typedefs[bare]
+        return ":#{bare}" if resolved && callback?(resolved)
         return typedef_type(resolved) if resolved
 
         ":pointer"

@@ -2,31 +2,63 @@ name: Ruby
 
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
   pull_request:
 
 permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+  test:
+    name: ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        ruby:
-          - '4.0'
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        ruby: ["3.2", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
         with:
           persist-credentials: false
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+          submodules: recursive
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - name: Run the default task
-        run: bundle exec rake
+      - name: Run Ruby specs
+        run: bundle exec rake spec
+      - name: Verify generated bindings
+        shell: bash
+        run: |
+          bundle exec rake generate
+          git diff --exit-code
+      - name: Run native headless smoke test
+        run: bundle exec rake native:spec
+      - name: Build platform gem
+        if: matrix.ruby == '4.0'
+        run: bundle exec rake gem:platform
+      - uses: actions/upload-artifact@v4
+        if: matrix.ruby == '4.0'
+        with:
+          name: platform-gem-${{ matrix.os }}
+          path: pkg/*.gem
+
+  package:
+    name: Package source gem
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          submodules: recursive
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+      - run: bundle exec rake build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-gem
+          path: pkg/*.gem

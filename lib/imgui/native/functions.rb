@@ -60,7 +60,7 @@ module ImGui
     attach_function :ImDrawListSplitter_destroy, [:pointer], :void
     attach_function :ImDrawList_AddBezierCubic, [:pointer, ImVec2.by_value, ImVec2.by_value, ImVec2.by_value, ImVec2.by_value, :uint, :float, :int], :void
     attach_function :ImDrawList_AddBezierQuadratic, [:pointer, ImVec2.by_value, ImVec2.by_value, ImVec2.by_value, :uint, :float, :int], :void
-    attach_function :ImDrawList_AddCallback, [:pointer, :pointer, :pointer, :size_t], :void
+    attach_function :ImDrawList_AddCallback, [:pointer, :ImDrawCallback, :pointer, :size_t], :void
     attach_function :ImDrawList_AddCircle, [:pointer, ImVec2.by_value, :float, :uint, :int, :float], :void
     attach_function :ImDrawList_AddCircleFilled, [:pointer, ImVec2.by_value, :float, :uint, :int], :void
     attach_function :ImDrawList_AddConcavePolyFilled, [:pointer, :pointer, :int, :uint], :void
@@ -611,7 +611,7 @@ module ImGui
     attach_function :ImVec4_ImVec4_Nil, [], :pointer
     attach_function :ImVec4_destroy, [:pointer], :void
     attach_function :ImVector_ImVector_Nil, [], :pointer
-    attach_function :ImVector_ImVector_Vector_T_, [:pointer], :pointer
+    attach_function :ImVector_ImVector_Vector_T_, [ImVector.by_value], :pointer
     attach_function :ImVector__grow_capacity, [:pointer, :int], :int
     attach_function :ImVector_back_Nil, [:pointer], :pointer
     attach_function :ImVector_back__const, [:pointer], :pointer
@@ -1140,11 +1140,11 @@ module ImGui
     attach_function :igInputInt4, [:string, :pointer, :int], :bool
     attach_function :igInputScalar, [:string, :int, :pointer, :pointer, :pointer, :string, :int], :bool
     attach_function :igInputScalarN, [:string, :int, :pointer, :int, :pointer, :pointer, :string, :int], :bool
-    attach_function :igInputText, [:string, :pointer, :size_t, :int, :pointer, :pointer], :bool
+    attach_function :igInputText, [:string, :pointer, :size_t, :int, :ImGuiInputTextCallback, :pointer], :bool
     attach_function :igInputTextDeactivateHook, [:uint], :void
-    attach_function :igInputTextEx, [:string, :string, :pointer, :int, ImVec2.by_value, :int, :pointer, :pointer], :bool
-    attach_function :igInputTextMultiline, [:string, :pointer, :size_t, ImVec2.by_value, :int, :pointer, :pointer], :bool
-    attach_function :igInputTextWithHint, [:string, :string, :pointer, :size_t, :int, :pointer, :pointer], :bool
+    attach_function :igInputTextEx, [:string, :string, :pointer, :int, ImVec2.by_value, :int, :ImGuiInputTextCallback, :pointer], :bool
+    attach_function :igInputTextMultiline, [:string, :pointer, :size_t, ImVec2.by_value, :int, :ImGuiInputTextCallback, :pointer], :bool
+    attach_function :igInputTextWithHint, [:string, :string, :pointer, :size_t, :int, :ImGuiInputTextCallback, :pointer], :bool
     attach_function :igInvisibleButton, [:string, ImVec2.by_value, :int], :bool
     attach_function :igIsActiveIdUsingNavDir, [:int], :bool
     attach_function :igIsAliasKey, [:int], :bool
@@ -1344,7 +1344,7 @@ module ImGui
     attach_function :igSeparatorTextEx, [:uint, :string, :string, :float], :void
     attach_function :igSetActiveID, [:uint, :pointer], :void
     attach_function :igSetActiveIdUsingAllKeyboardKeys, [], :void
-    attach_function :igSetAllocatorFunctions, [:pointer, :pointer, :pointer], :void
+    attach_function :igSetAllocatorFunctions, [:ImGuiMemAllocFunc, :ImGuiMemFreeFunc, :pointer], :void
     attach_function :igSetClipboardText, [:string], :void
     attach_function :igSetColorEditOptions, [:int], :void
     attach_function :igSetColumnOffset, [:int, :float], :void
@@ -1392,7 +1392,7 @@ module ImGui
     attach_function :igSetNextWindowRefreshPolicy, [:int], :void
     attach_function :igSetNextWindowScroll, [ImVec2.by_value], :void
     attach_function :igSetNextWindowSize, [ImVec2.by_value, :int], :void
-    attach_function :igSetNextWindowSizeConstraints, [ImVec2.by_value, ImVec2.by_value, :pointer, :pointer], :void
+    attach_function :igSetNextWindowSizeConstraints, [ImVec2.by_value, ImVec2.by_value, :ImGuiSizeCallback, :pointer], :void
     attach_function :igSetNextWindowViewport, [:uint], :void
     attach_function :igSetScrollFromPosX_Float, [:float, :float], :void
     attach_function :igSetScrollFromPosX_WindowPtr, [:pointer, :float, :float], :void
