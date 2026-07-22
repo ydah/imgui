@@ -71,6 +71,18 @@ if(IMGUI_RUBY_WITH_SDL3)
   list(APPEND IMGUI_RUBY_BACKEND_DEFINITIONS CIMGUI_USE_SDL3)
 endif()
 
+if(IMGUI_RUBY_WITH_WGPU)
+  if(NOT EXISTS "${WEBGPU_HEADERS_DIR}/webgpu/webgpu.h")
+    message(FATAL_ERROR "WebGPU headers submodule is missing; run git submodule update --init --recursive")
+  endif()
+  list(APPEND IMGUI_RUBY_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/imgui_ruby_wgpu.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/webgpu_function_bridge.cpp"
+    "${IMGUI_DIR}/backends/imgui_impl_wgpu.cpp"
+  )
+  list(APPEND IMGUI_RUBY_BACKEND_DEFINITIONS IMGUI_IMPL_WEBGPU_BACKEND_WGPU)
+endif()
+
 list(REMOVE_DUPLICATES IMGUI_RUBY_SOURCES)
 add_library(cimgui_ruby SHARED ${IMGUI_RUBY_SOURCES})
 target_include_directories(cimgui_ruby PRIVATE
