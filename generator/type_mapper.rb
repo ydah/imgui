@@ -32,8 +32,10 @@ module ImGuiRuby
       def ffi_type(c_type, member: nil)
         type = normalize(c_type)
         array_size = member&.fetch("size", nil) || array_size_from(type)
+        return ":pointer" if member.nil? && array_size
+
         type = type.sub(/\s*\[[^\]]+\]\z/, "") if array_size
-        mapped = map_scalar(type)
+        mapped = map_scalar(type, struct_member: !member.nil?)
         return mapped unless array_size
 
         "[#{mapped}, #{array_size}]"
@@ -53,8 +55,9 @@ module ImGuiRuby
 
       private
 
-      def map_scalar(type)
-        return ":string" if type.match?(/\A(?:const\s+)?char\s*\*\z/)
+      def map_scalar(type, struct_member: false)
+        return ":pointer" if struct_member && pointer?(type)
+        return ":string" if type.match?(/\Aconst\s+char\s*\*\z/)
         return ":pointer" if pointer?(type) || callback?(type)
 
         bare = type.sub(/\Aconst\s+/, "").strip

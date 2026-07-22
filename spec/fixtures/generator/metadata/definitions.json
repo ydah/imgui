@@ -7,24 +7,33 @@
         {"name": "flags", "type": "ImGuiConfigFlags"}
       ],
       "cimguiname": "igBegin",
+      "funcname": "Begin",
+      "location": "imgui:1",
       "ov_cimguiname": "igBegin",
-      "ret": "bool"
+      "ret": "bool",
+      "stname": ""
     }
   ],
   "igGetIO": [
     {
       "argsT": [],
       "cimguiname": "igGetIO",
+      "funcname": "GetIO",
+      "location": "imgui:2",
       "ov_cimguiname": "igGetIO_Nil",
-      "ret": "ImGuiIO*"
+      "ret": "ImGuiIO*",
+      "stname": ""
     }
   ],
   "igText": [
     {
       "argsT": [{"name": "fmt", "type": "const char*"}],
       "cimguiname": "igText",
+      "funcname": "Text",
       "isvararg": true,
-      "ret": "void"
+      "location": "imgui:3",
+      "ret": "void",
+      "stname": ""
     }
   ]
 }

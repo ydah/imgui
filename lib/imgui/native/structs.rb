@@ -194,7 +194,7 @@ module ImGui
         "_TextureIdStack", :pointer,
         "_CallbacksDataBuf", :pointer,
         "_FringeScale", :float,
-        "_OwnerName", :string
+        "_OwnerName", :pointer
     )
     ImDrawListSharedData.layout(
         "TexUvWhitePixel", ImVec2.by_value,
@@ -358,8 +358,8 @@ module ImGui
         "DisplaySize", ImVec2.by_value,
         "DeltaTime", :float,
         "IniSavingRate", :float,
-        "IniFilename", :string,
-        "LogFilename", :string,
+        "IniFilename", :pointer,
+        "LogFilename", :pointer,
         "UserData", :pointer,
         "Fonts", :pointer,
         "FontGlobalScale", :float,
@@ -408,8 +408,8 @@ module ImGui
         "ConfigDebugBeginReturnValueLoop", :bool,
         "ConfigDebugIgnoreFocusLoss", :bool,
         "ConfigDebugIniSettings", :bool,
-        "BackendPlatformName", :string,
-        "BackendRendererName", :string,
+        "BackendPlatformName", :pointer,
+        "BackendRendererName", :pointer,
         "BackendPlatformUserData", :pointer,
         "BackendRendererUserData", :pointer,
         "BackendLanguageUserData", :pointer,
@@ -676,7 +676,7 @@ module ImGui
         "Flags", :int,
         "ID", :uint,
         "TextLen", :int,
-        "TextSrc", :string,
+        "TextSrc", :pointer,
         "TextA", :pointer,
         "TextToRevertTo", :pointer,
         "CallbackTextBackup", :pointer,
@@ -697,7 +697,7 @@ module ImGui
     ImGuiTypingSelectRequest.layout(
         "Flags", :int,
         "SearchBufferLen", :int,
-        "SearchBuffer", :string,
+        "SearchBuffer", :pointer,
         "SelectRequest", :bool,
         "SingleCharMode", :bool,
         "SingleCharSize", :char
@@ -1041,14 +1041,14 @@ module ImGui
         "SettingsTables", :pointer,
         "Hooks", :pointer,
         "HookIdNext", :uint,
-        "LocalizationTable[ImGuiLocKey_COUNT]", [:string, 13],
+        "LocalizationTable[ImGuiLocKey_COUNT]", [:pointer, 13],
         "LogEnabled", :bool,
         "LogFlags", :int,
         "LogWindow", :pointer,
         "LogFile", :pointer,
         "LogBuffer", ImGuiTextBuffer.by_value,
-        "LogNextPrefix", :string,
-        "LogNextSuffix", :string,
+        "LogNextPrefix", :pointer,
+        "LogNextSuffix", :pointer,
         "LogLinePosY", :float,
         "LogLineFirstItem", :bool,
         "LogDepthRef", :int,
@@ -1100,9 +1100,9 @@ module ImGui
     )
     ImGuiDataTypeInfo.layout(
         "Size", :size_t,
-        "Name", :string,
-        "PrintFmt", :string,
-        "ScanFmt", :string
+        "Name", :pointer,
+        "PrintFmt", :pointer,
+        "ScanFmt", :pointer
     )
     ImGuiDockNode.layout(
         "ID", :uint,
@@ -1201,7 +1201,7 @@ module ImGui
         "UserData", :pointer,
         "EventChar", :ushort,
         "EventKey", :int,
-        "Buf", :string,
+        "Buf", :pointer,
         "BufTextLen", :int,
         "BufSize", :int,
         "BufDirty", :bool,
@@ -1243,7 +1243,7 @@ module ImGui
     )
     ImGuiLocEntry.layout(
         "Key", :int,
-        "Text", :string
+        "Text", :pointer
     )
     ImGuiMenuColumns.layout(
         "TotalWidth", :uint,
@@ -1353,7 +1353,7 @@ module ImGui
         "RangeLastItem", :pointer
     )
     ImGuiSettingsHandler.layout(
-        "TypeName", :string,
+        "TypeName", :pointer,
         "TypeHash", :uint,
         "ClearAllFn", :pointer,
         "ReadInitFn", :pointer,
@@ -1670,8 +1670,8 @@ module ImGui
         "CountGrep", :int
     )
     ImGuiTextRange.layout(
-        "b", :string,
-        "e", :string
+        "b", :pointer,
+        "e", :pointer
     )
     ImGuiTreeNodeStackData.layout(
         "ID", :uint,
@@ -1775,7 +1775,7 @@ module ImGui
     )
     ImGuiWindow.layout(
         "Ctx", :pointer,
-        "Name", :string,
+        "Name", :pointer,
         "ID", :uint,
         "Flags", :int,
         "FlagsPreviousFrame", :int,

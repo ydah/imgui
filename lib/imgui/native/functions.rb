@@ -444,7 +444,7 @@ module ImGui
     attach_function :ImGuiViewport_destroy, [:pointer], :void
     attach_function :ImGuiWindowClass_ImGuiWindowClass, [], :pointer
     attach_function :ImGuiWindowClass_destroy, [:pointer], :void
-    attach_function :ImGuiWindowSettings_GetName, [:pointer], :string
+    attach_function :ImGuiWindowSettings_GetName, [:pointer], :pointer
     attach_function :ImGuiWindowSettings_ImGuiWindowSettings, [], :pointer
     attach_function :ImGuiWindowSettings_destroy, [:pointer], :void
     attach_function :ImGuiWindow_CalcFontSize, [:pointer], :float
@@ -666,11 +666,11 @@ module ImGui
     attach_function :igColorConvertHSVtoRGB, [:float, :float, :float, :pointer, :pointer, :pointer], :void
     attach_function :igColorConvertRGBtoHSV, [:float, :float, :float, :pointer, :pointer, :pointer], :void
     attach_function :igColorConvertU32ToFloat4, [:pointer, :uint], :void
-    attach_function :igColorEdit3, [:string, [:float, 3], :int], :bool
-    attach_function :igColorEdit4, [:string, [:float, 4], :int], :bool
+    attach_function :igColorEdit3, [:string, :pointer, :int], :bool
+    attach_function :igColorEdit4, [:string, :pointer, :int], :bool
     attach_function :igColorEditOptionsPopup, [:pointer, :int], :void
-    attach_function :igColorPicker3, [:string, [:float, 3], :int], :bool
-    attach_function :igColorPicker4, [:string, [:float, 4], :int, :pointer], :bool
+    attach_function :igColorPicker3, [:string, :pointer, :int], :bool
+    attach_function :igColorPicker4, [:string, :pointer, :int, :pointer], :bool
     attach_function :igColorPickerOptionsPopup, [:pointer, :int], :void
     attach_function :igColorTooltip, [:string, :pointer, :int], :void
     attach_function :igColumns, [:int, :string, :bool], :void
@@ -684,7 +684,7 @@ module ImGui
     attach_function :igDataTypeApplyOp, [:int, :int, :pointer, :pointer, :pointer], :void
     attach_function :igDataTypeClamp, [:int, :pointer, :pointer, :pointer], :bool
     attach_function :igDataTypeCompare, [:int, :pointer, :pointer], :int
-    attach_function :igDataTypeFormatString, [:string, :int, :int, :pointer, :string], :int
+    attach_function :igDataTypeFormatString, [:pointer, :int, :int, :pointer, :string], :int
     attach_function :igDataTypeGetInfo, [:int], :pointer
     attach_function :igDataTypeIsZero, [:int, :pointer], :bool
     attach_function :igDebugAllocHook, [:pointer, :int, :pointer, :size_t], :void
@@ -768,14 +768,14 @@ module ImGui
     attach_function :igDockSpaceOverViewport, [:uint, :pointer, :int, :pointer], :uint
     attach_function :igDragBehavior, [:uint, :int, :pointer, :float, :pointer, :pointer, :string, :int], :bool
     attach_function :igDragFloat, [:string, :pointer, :float, :float, :float, :string, :int], :bool
-    attach_function :igDragFloat2, [:string, [:float, 2], :float, :float, :float, :string, :int], :bool
-    attach_function :igDragFloat3, [:string, [:float, 3], :float, :float, :float, :string, :int], :bool
-    attach_function :igDragFloat4, [:string, [:float, 4], :float, :float, :float, :string, :int], :bool
+    attach_function :igDragFloat2, [:string, :pointer, :float, :float, :float, :string, :int], :bool
+    attach_function :igDragFloat3, [:string, :pointer, :float, :float, :float, :string, :int], :bool
+    attach_function :igDragFloat4, [:string, :pointer, :float, :float, :float, :string, :int], :bool
     attach_function :igDragFloatRange2, [:string, :pointer, :pointer, :float, :float, :float, :string, :string, :int], :bool
     attach_function :igDragInt, [:string, :pointer, :float, :int, :int, :string, :int], :bool
-    attach_function :igDragInt2, [:string, [:int, 2], :float, :int, :int, :string, :int], :bool
-    attach_function :igDragInt3, [:string, [:int, 3], :float, :int, :int, :string, :int], :bool
-    attach_function :igDragInt4, [:string, [:int, 4], :float, :int, :int, :string, :int], :bool
+    attach_function :igDragInt2, [:string, :pointer, :float, :int, :int, :string, :int], :bool
+    attach_function :igDragInt3, [:string, :pointer, :float, :int, :int, :string, :int], :bool
+    attach_function :igDragInt4, [:string, :pointer, :float, :int, :int, :string, :int], :bool
     attach_function :igDragIntRange2, [:string, :pointer, :pointer, :float, :int, :int, :string, :string, :int], :bool
     attach_function :igDragScalar, [:string, :int, :pointer, :float, :pointer, :pointer, :string, :int], :bool
     attach_function :igDragScalarN, [:string, :int, :pointer, :int, :float, :pointer, :pointer, :string, :int], :bool
@@ -973,17 +973,17 @@ module ImGui
     attach_function :igImFontAtlasBuildFinish, [:pointer], :void
     attach_function :igImFontAtlasBuildGetOversampleFactors, [:pointer, :pointer, :pointer], :void
     attach_function :igImFontAtlasBuildInit, [:pointer], :void
-    attach_function :igImFontAtlasBuildMultiplyCalcLookupTable, [[:uchar, 256], :float], :void
-    attach_function :igImFontAtlasBuildMultiplyRectAlpha8, [[:uchar, 256], :pointer, :int, :int, :int, :int, :int], :void
+    attach_function :igImFontAtlasBuildMultiplyCalcLookupTable, [:pointer, :float], :void
+    attach_function :igImFontAtlasBuildMultiplyRectAlpha8, [:pointer, :pointer, :int, :int, :int, :int, :int], :void
     attach_function :igImFontAtlasBuildPackCustomRects, [:pointer, :pointer], :void
     attach_function :igImFontAtlasBuildRender32bppRectFromString, [:pointer, :int, :int, :int, :int, :string, :char, :uint], :void
     attach_function :igImFontAtlasBuildRender8bppRectFromString, [:pointer, :int, :int, :int, :int, :string, :char, :uchar], :void
     attach_function :igImFontAtlasBuildSetupFont, [:pointer, :pointer, :pointer, :float, :float], :void
     attach_function :igImFontAtlasGetBuilderForStbTruetype, [], :pointer
-    attach_function :igImFontAtlasGetMouseCursorTexData, [:pointer, :int, :pointer, :pointer, [ImVec2.by_value, 2], [ImVec2.by_value, 2]], :bool
+    attach_function :igImFontAtlasGetMouseCursorTexData, [:pointer, :int, :pointer, :pointer, :pointer, :pointer], :bool
     attach_function :igImFontAtlasUpdateSourcesPointers, [:pointer], :void
     attach_function :igImFormatStringToTempBufferV, [:pointer, :pointer, :string, :pointer], :void
-    attach_function :igImFormatStringV, [:string, :size_t, :string, :pointer], :int
+    attach_function :igImFormatStringV, [:pointer, :size_t, :string, :pointer], :int
     attach_function :igImHashData, [:pointer, :size_t, :uint], :uint
     attach_function :igImHashStr, [:string, :size_t, :uint], :uint
     attach_function :igImInvLength, [ImVec2.by_value, :float], :float
@@ -1008,9 +1008,9 @@ module ImGui
     attach_function :igImParseFormatFindEnd, [:string], :string
     attach_function :igImParseFormatFindStart, [:string], :string
     attach_function :igImParseFormatPrecision, [:string, :int], :int
-    attach_function :igImParseFormatSanitizeForPrinting, [:string, :string, :size_t], :void
-    attach_function :igImParseFormatSanitizeForScanning, [:string, :string, :size_t], :string
-    attach_function :igImParseFormatTrimDecorations, [:string, :string, :size_t], :string
+    attach_function :igImParseFormatSanitizeForPrinting, [:string, :pointer, :size_t], :void
+    attach_function :igImParseFormatSanitizeForScanning, [:string, :pointer, :size_t], :string
+    attach_function :igImParseFormatTrimDecorations, [:string, :pointer, :size_t], :string
     attach_function :igImPow_Float, [:float, :float], :float
     attach_function :igImPow_double, [:double, :double], :double
     attach_function :igImQsort, [:pointer, :size_t, :size_t, :pointer], :void
@@ -1021,26 +1021,26 @@ module ImGui
     attach_function :igImSign_Float, [:float], :float
     attach_function :igImSign_double, [:double], :double
     attach_function :igImStrSkipBlank, [:string], :string
-    attach_function :igImStrTrimBlanks, [:string], :void
+    attach_function :igImStrTrimBlanks, [:pointer], :void
     attach_function :igImStrbol, [:string, :string], :string
     attach_function :igImStrchrRange, [:string, :string, :char], :string
-    attach_function :igImStrdup, [:string], :string
-    attach_function :igImStrdupcpy, [:string, :pointer, :string], :string
+    attach_function :igImStrdup, [:string], :pointer
+    attach_function :igImStrdupcpy, [:pointer, :pointer, :string], :pointer
     attach_function :igImStreolRange, [:string, :string], :string
     attach_function :igImStricmp, [:string, :string], :int
     attach_function :igImStristr, [:string, :string, :string, :string], :string
     attach_function :igImStrlenW, [:pointer], :int
-    attach_function :igImStrncpy, [:string, :string, :size_t], :void
+    attach_function :igImStrncpy, [:pointer, :string, :size_t], :void
     attach_function :igImStrnicmp, [:string, :string, :size_t], :int
     attach_function :igImTextCharFromUtf8, [:pointer, :string, :string], :int
-    attach_function :igImTextCharToUtf8, [[:char, 5], :uint], :string
+    attach_function :igImTextCharToUtf8, [:pointer, :uint], :string
     attach_function :igImTextCountCharsFromUtf8, [:string, :string], :int
     attach_function :igImTextCountLines, [:string, :string], :int
     attach_function :igImTextCountUtf8BytesFromChar, [:string, :string], :int
     attach_function :igImTextCountUtf8BytesFromStr, [:pointer, :pointer], :int
     attach_function :igImTextFindPreviousUtf8Codepoint, [:string, :string], :string
     attach_function :igImTextStrFromUtf8, [:pointer, :int, :string, :string, :pointer], :int
-    attach_function :igImTextStrToUtf8, [:string, :int, :pointer, :pointer], :int
+    attach_function :igImTextStrToUtf8, [:pointer, :int, :pointer, :pointer], :int
     attach_function :igImToUpper, [:char], :char
     attach_function :igImTriangleArea, [ImVec2.by_value, ImVec2.by_value, ImVec2.by_value], :float
     attach_function :igImTriangleBarycentricCoords, [ImVec2.by_value, ImVec2.by_value, ImVec2.by_value, ImVec2.by_value, :pointer, :pointer, :pointer], :void
@@ -1058,20 +1058,20 @@ module ImGui
     attach_function :igInitialize, [], :void
     attach_function :igInputDouble, [:string, :pointer, :double, :double, :string, :int], :bool
     attach_function :igInputFloat, [:string, :pointer, :float, :float, :string, :int], :bool
-    attach_function :igInputFloat2, [:string, [:float, 2], :string, :int], :bool
-    attach_function :igInputFloat3, [:string, [:float, 3], :string, :int], :bool
-    attach_function :igInputFloat4, [:string, [:float, 4], :string, :int], :bool
+    attach_function :igInputFloat2, [:string, :pointer, :string, :int], :bool
+    attach_function :igInputFloat3, [:string, :pointer, :string, :int], :bool
+    attach_function :igInputFloat4, [:string, :pointer, :string, :int], :bool
     attach_function :igInputInt, [:string, :pointer, :int, :int, :int], :bool
-    attach_function :igInputInt2, [:string, [:int, 2], :int], :bool
-    attach_function :igInputInt3, [:string, [:int, 3], :int], :bool
-    attach_function :igInputInt4, [:string, [:int, 4], :int], :bool
+    attach_function :igInputInt2, [:string, :pointer, :int], :bool
+    attach_function :igInputInt3, [:string, :pointer, :int], :bool
+    attach_function :igInputInt4, [:string, :pointer, :int], :bool
     attach_function :igInputScalar, [:string, :int, :pointer, :pointer, :pointer, :string, :int], :bool
     attach_function :igInputScalarN, [:string, :int, :pointer, :int, :pointer, :pointer, :string, :int], :bool
-    attach_function :igInputText, [:string, :string, :size_t, :int, :pointer, :pointer], :bool
+    attach_function :igInputText, [:string, :pointer, :size_t, :int, :pointer, :pointer], :bool
     attach_function :igInputTextDeactivateHook, [:uint], :void
-    attach_function :igInputTextEx, [:string, :string, :string, :int, ImVec2.by_value, :int, :pointer, :pointer], :bool
-    attach_function :igInputTextMultiline, [:string, :string, :size_t, ImVec2.by_value, :int, :pointer, :pointer], :bool
-    attach_function :igInputTextWithHint, [:string, :string, :string, :size_t, :int, :pointer, :pointer], :bool
+    attach_function :igInputTextEx, [:string, :string, :pointer, :int, ImVec2.by_value, :int, :pointer, :pointer], :bool
+    attach_function :igInputTextMultiline, [:string, :pointer, :size_t, ImVec2.by_value, :int, :pointer, :pointer], :bool
+    attach_function :igInputTextWithHint, [:string, :string, :pointer, :size_t, :int, :pointer, :pointer], :bool
     attach_function :igInvisibleButton, [:string, ImVec2.by_value, :int], :bool
     attach_function :igIsActiveIdUsingNavDir, [:int], :bool
     attach_function :igIsAliasKey, [:int], :bool
@@ -1373,13 +1373,13 @@ module ImGui
     attach_function :igSliderAngle, [:string, :pointer, :float, :float, :string, :int], :bool
     attach_function :igSliderBehavior, [ImRect.by_value, :uint, :int, :pointer, :pointer, :pointer, :string, :int, :pointer], :bool
     attach_function :igSliderFloat, [:string, :pointer, :float, :float, :string, :int], :bool
-    attach_function :igSliderFloat2, [:string, [:float, 2], :float, :float, :string, :int], :bool
-    attach_function :igSliderFloat3, [:string, [:float, 3], :float, :float, :string, :int], :bool
-    attach_function :igSliderFloat4, [:string, [:float, 4], :float, :float, :string, :int], :bool
+    attach_function :igSliderFloat2, [:string, :pointer, :float, :float, :string, :int], :bool
+    attach_function :igSliderFloat3, [:string, :pointer, :float, :float, :string, :int], :bool
+    attach_function :igSliderFloat4, [:string, :pointer, :float, :float, :string, :int], :bool
     attach_function :igSliderInt, [:string, :pointer, :int, :int, :string, :int], :bool
-    attach_function :igSliderInt2, [:string, [:int, 2], :int, :int, :string, :int], :bool
-    attach_function :igSliderInt3, [:string, [:int, 3], :int, :int, :string, :int], :bool
-    attach_function :igSliderInt4, [:string, [:int, 4], :int, :int, :string, :int], :bool
+    attach_function :igSliderInt2, [:string, :pointer, :int, :int, :string, :int], :bool
+    attach_function :igSliderInt3, [:string, :pointer, :int, :int, :string, :int], :bool
+    attach_function :igSliderInt4, [:string, :pointer, :int, :int, :string, :int], :bool
     attach_function :igSliderScalar, [:string, :int, :pointer, :pointer, :pointer, :string, :int], :bool
     attach_function :igSliderScalarN, [:string, :int, :pointer, :int, :pointer, :pointer, :string, :int], :bool
     attach_function :igSmallButton, [:string], :bool
@@ -1479,7 +1479,7 @@ module ImGui
     attach_function :igTeleportMousePos, [ImVec2.by_value], :void
     attach_function :igTempInputIsActive, [:uint], :bool
     attach_function :igTempInputScalar, [ImRect.by_value, :uint, :string, :int, :pointer, :string, :pointer, :pointer], :bool
-    attach_function :igTempInputText, [ImRect.by_value, :uint, :string, :string, :int, :int], :bool
+    attach_function :igTempInputText, [ImRect.by_value, :uint, :string, :pointer, :int, :int], :bool
     attach_function :igTestKeyOwner, [:int, :uint], :bool
     attach_function :igTestShortcutRouting, [:int, :uint], :bool
     attach_function :igTextColoredV, [ImVec4.by_value, :string, :pointer], :void
