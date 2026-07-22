@@ -13,6 +13,10 @@
       "method_count": 8,
       "sha256": "7fe06d1fe8a70fc5da9506aa35781aee9c93b27886bd1a980109c5e702b8e621"
     },
+    "ImGui::Backends": {
+      "method_count": 3,
+      "sha256": "7da32543c540d627d33ebd0bf0826cebf3ef7ebadc55391c6c38d1ec98fca320"
+    },
     "ImGui::Backends::OpenGL3": {
       "method_count": 8,
       "sha256": "e4c26cc73c9536480f28cac617206774aff663e571979ab0a1e2c87ab593a803"

@@ -8,6 +8,7 @@ RSpec.describe "v1 public API compatibility" do
   SURFACES = {
     "ImGui" => [ImGui, :singleton_methods],
     "ImPlot" => [ImPlot, :singleton_methods],
+    "ImGui::Backends" => [ImGui::Backends, :singleton_methods],
     "ImGui::Backends::Glfw" => [ImGui::Backends::Glfw, :singleton_methods],
     "ImGui::Backends::OpenGL3" => [ImGui::Backends::OpenGL3, :singleton_methods],
     "ImGui::Backends::SDL3" => [ImGui::Backends::SDL3, :singleton_methods],
