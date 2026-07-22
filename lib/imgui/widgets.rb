@@ -33,8 +33,9 @@ module ImGui
 
     def set_tooltip(value, *format_arguments)
       guard_context!
-      Native.igBeginTooltip
-      opened = true
+      opened = Native.igBeginTooltip
+      return false unless opened
+
       text(value, *format_arguments)
     ensure
       Native.igEndTooltip if opened

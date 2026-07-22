@@ -14,14 +14,10 @@ module ImGui
       attr_reader :loaded_path
 
       def attach_function(*signature)
-        return ffi_attach_function(*signature) if loaded?
-
-        pending_functions << signature
         ruby_name = signature.fetch(0)
-        define_singleton_method(ruby_name) do |*arguments|
-          load!
-          public_send(ruby_name, *arguments)
-        end
+        function_signatures[ruby_name] = signature
+        registered_function_names << ruby_name unless registered_function_names.include?(ruby_name)
+        define_lazy_function(ruby_name)
       end
 
       def load!(path: nil)
@@ -32,7 +28,6 @@ module ImGui
           begin
             ffi_lib candidate
             @loaded_path = candidate
-            bind_pending_functions!
             return loaded_path
           rescue LoadError, FFI::NotFoundError => error
             failures << "#{candidate}: #{error.message.lines.first&.strip}"
@@ -54,7 +49,13 @@ module ImGui
       end
 
       def registered_functions
-        pending_functions.map(&:first).freeze
+        registered_function_names.dup.freeze
+      end
+
+      def bind_all!
+        load!
+        function_signatures.keys.each { |name| bind_function!(name) }
+        true
       end
 
       def library_candidates(explicit_path = nil)
@@ -73,22 +74,30 @@ module ImGui
 
       private
 
-      def pending_functions
-        @pending_functions ||= []
+      def function_signatures
+        @function_signatures ||= {}
       end
 
-      def bind_pending_functions!
-        functions = pending_functions.dup
-        pending_functions.clear
+      def registered_function_names
+        @registered_function_names ||= []
+      end
 
-        functions.each do |signature|
-          singleton_class.send(:remove_method, signature.fetch(0))
-          ffi_attach_function(*signature)
+      def define_lazy_function(ruby_name)
+        define_singleton_method(ruby_name) do |*arguments|
+          load!
+          bind_function!(ruby_name)
+          public_send(ruby_name, *arguments)
         end
-      rescue StandardError
-        @loaded_path = nil
-        pending_functions.concat(functions)
-        raise
+      end
+
+      def bind_function!(ruby_name)
+        signature = function_signatures.fetch(ruby_name)
+        singleton_class.send(:remove_method, ruby_name)
+        ffi_attach_function(*signature)
+        function_signatures.delete(ruby_name)
+      rescue FFI::NotFoundError => error
+        define_lazy_function(ruby_name)
+        raise MissingSymbolError, "#{ruby_name} is not exported by #{loaded_path}: #{error.message}"
       end
 
       def vendored_library_candidates
@@ -97,11 +106,18 @@ module ImGui
         filenames = [library_filename]
         filenames << "#{LIBRARY_BASENAME}.dll" if FFI::Platform.windows?
 
-        filenames.flat_map do |filename|
-          [
-            File.join(vendor_root, platform, filename),
-            File.join(vendor_root, filename)
-          ]
+        vendor_roots = [vendor_root]
+        $LOAD_PATH.each do |load_path|
+          vendor_roots << File.join(load_path, "imgui", "vendor")
+        end
+
+        vendor_roots.uniq.flat_map do |root|
+          filenames.flat_map do |filename|
+            [
+              File.join(root, platform, filename),
+              File.join(root, filename)
+            ]
+          end
         end.select { |candidate| File.file?(candidate) }
       end
     end

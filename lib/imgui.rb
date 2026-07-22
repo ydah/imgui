@@ -16,6 +16,13 @@ require_relative "imgui/api"
 require_relative "imgui/api_generated"
 require_relative "imgui/widgets"
 require_relative "imgui/layout"
+require_relative "imgui/dsl"
+require_relative "imgui/backends"
+require_relative "imgui/backends/glfw"
+require_relative "imgui/backends/opengl3"
+require_relative "imgui/backends/sdl3"
+require_relative "imgui/backends/wgpu"
+require_relative "imgui/easy_loop"
 
 module ImGui
 end

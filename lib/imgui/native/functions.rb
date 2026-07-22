@@ -458,6 +458,79 @@ module ImGui
     attach_function :ImGuiWindow_Rect, [:pointer, :pointer], :void
     attach_function :ImGuiWindow_TitleBarRect, [:pointer, :pointer], :void
     attach_function :ImGuiWindow_destroy, [:pointer], :void
+    attach_function :ImGui_ImplGlfw_CharCallback, [:pointer, :uint], :void
+    attach_function :ImGui_ImplGlfw_CursorEnterCallback, [:pointer, :int], :void
+    attach_function :ImGui_ImplGlfw_CursorPosCallback, [:pointer, :double, :double], :void
+    attach_function :ImGui_ImplGlfw_InitForOpenGL, [:pointer, :bool], :bool
+    attach_function :ImGui_ImplGlfw_InitForOther, [:pointer, :bool], :bool
+    attach_function :ImGui_ImplGlfw_InitForVulkan, [:pointer, :bool], :bool
+    attach_function :ImGui_ImplGlfw_InstallCallbacks, [:pointer], :void
+    attach_function :ImGui_ImplGlfw_KeyCallback, [:pointer, :int, :int, :int, :int], :void
+    attach_function :ImGui_ImplGlfw_MonitorCallback, [:pointer, :int], :void
+    attach_function :ImGui_ImplGlfw_MouseButtonCallback, [:pointer, :int, :int, :int], :void
+    attach_function :ImGui_ImplGlfw_NewFrame, [], :void
+    attach_function :ImGui_ImplGlfw_RestoreCallbacks, [:pointer], :void
+    attach_function :ImGui_ImplGlfw_ScrollCallback, [:pointer, :double, :double], :void
+    attach_function :ImGui_ImplGlfw_SetCallbacksChainForAllWindows, [:bool], :void
+    attach_function :ImGui_ImplGlfw_Shutdown, [], :void
+    attach_function :ImGui_ImplGlfw_Sleep, [:int], :void
+    attach_function :ImGui_ImplGlfw_WindowFocusCallback, [:pointer, :int], :void
+    attach_function :ImGui_ImplOpenGL2_CreateDeviceObjects, [], :bool
+    attach_function :ImGui_ImplOpenGL2_CreateFontsTexture, [], :bool
+    attach_function :ImGui_ImplOpenGL2_DestroyDeviceObjects, [], :void
+    attach_function :ImGui_ImplOpenGL2_DestroyFontsTexture, [], :void
+    attach_function :ImGui_ImplOpenGL2_Init, [], :bool
+    attach_function :ImGui_ImplOpenGL2_NewFrame, [], :void
+    attach_function :ImGui_ImplOpenGL2_RenderDrawData, [:pointer], :void
+    attach_function :ImGui_ImplOpenGL2_Shutdown, [], :void
+    attach_function :ImGui_ImplOpenGL3_CreateDeviceObjects, [], :bool
+    attach_function :ImGui_ImplOpenGL3_CreateFontsTexture, [], :bool
+    attach_function :ImGui_ImplOpenGL3_DestroyDeviceObjects, [], :void
+    attach_function :ImGui_ImplOpenGL3_DestroyFontsTexture, [], :void
+    attach_function :ImGui_ImplOpenGL3_Init, [:string], :bool
+    attach_function :ImGui_ImplOpenGL3_NewFrame, [], :void
+    attach_function :ImGui_ImplOpenGL3_RenderDrawData, [:pointer], :void
+    attach_function :ImGui_ImplOpenGL3_Shutdown, [], :void
+    attach_function :ImGui_ImplSDL2_InitForD3D, [:pointer], :bool
+    attach_function :ImGui_ImplSDL2_InitForMetal, [:pointer], :bool
+    attach_function :ImGui_ImplSDL2_InitForOpenGL, [:pointer, :pointer], :bool
+    attach_function :ImGui_ImplSDL2_InitForOther, [:pointer], :bool
+    attach_function :ImGui_ImplSDL2_InitForSDLRenderer, [:pointer, :pointer], :bool
+    attach_function :ImGui_ImplSDL2_InitForVulkan, [:pointer], :bool
+    attach_function :ImGui_ImplSDL2_NewFrame, [], :void
+    attach_function :ImGui_ImplSDL2_ProcessEvent, [:pointer], :bool
+    attach_function :ImGui_ImplSDL2_SetGamepadMode, [:pointer, :pointer, :int], :void
+    attach_function :ImGui_ImplSDL2_Shutdown, [], :void
+    attach_function :ImGui_ImplSDL3_InitForD3D, [:pointer], :bool
+    attach_function :ImGui_ImplSDL3_InitForMetal, [:pointer], :bool
+    attach_function :ImGui_ImplSDL3_InitForOpenGL, [:pointer, :pointer], :bool
+    attach_function :ImGui_ImplSDL3_InitForOther, [:pointer], :bool
+    attach_function :ImGui_ImplSDL3_InitForSDLGPU, [:pointer], :bool
+    attach_function :ImGui_ImplSDL3_InitForSDLRenderer, [:pointer, :pointer], :bool
+    attach_function :ImGui_ImplSDL3_InitForVulkan, [:pointer], :bool
+    attach_function :ImGui_ImplSDL3_NewFrame, [], :void
+    attach_function :ImGui_ImplSDL3_ProcessEvent, [:pointer], :bool
+    attach_function :ImGui_ImplSDL3_SetGamepadMode, [:pointer, :pointer, :int], :void
+    attach_function :ImGui_ImplSDL3_Shutdown, [], :void
+    attach_function :ImGui_ImplVulkanH_CreateOrResizeWindow, [:pointer, :pointer, :pointer, :pointer, :pointer, :pointer, :int, :int, :pointer], :void
+    attach_function :ImGui_ImplVulkanH_DestroyWindow, [:pointer, :pointer, :pointer, :pointer], :void
+    attach_function :ImGui_ImplVulkanH_GetMinImageCountFromPresentMode, [:pointer], :int
+    attach_function :ImGui_ImplVulkanH_SelectPhysicalDevice, [:pointer], :pointer
+    attach_function :ImGui_ImplVulkanH_SelectPresentMode, [:pointer, :pointer, :pointer, :int], :pointer
+    attach_function :ImGui_ImplVulkanH_SelectQueueFamilyIndex, [:pointer], :pointer
+    attach_function :ImGui_ImplVulkanH_SelectSurfaceFormat, [:pointer, :pointer, :pointer, :int, :pointer], :pointer
+    attach_function :ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window, [], :pointer
+    attach_function :ImGui_ImplVulkanH_Window_destroy, [:pointer], :void
+    attach_function :ImGui_ImplVulkan_AddTexture, [:pointer, :pointer, :pointer], :pointer
+    attach_function :ImGui_ImplVulkan_CreateFontsTexture, [], :bool
+    attach_function :ImGui_ImplVulkan_DestroyFontsTexture, [], :void
+    attach_function :ImGui_ImplVulkan_Init, [:pointer], :bool
+    attach_function :ImGui_ImplVulkan_LoadFunctions, [:pointer, :pointer, :pointer], :bool
+    attach_function :ImGui_ImplVulkan_NewFrame, [], :void
+    attach_function :ImGui_ImplVulkan_RemoveTexture, [:pointer], :void
+    attach_function :ImGui_ImplVulkan_RenderDrawData, [:pointer, :pointer, :pointer], :void
+    attach_function :ImGui_ImplVulkan_SetMinImageCount, [:pointer], :void
+    attach_function :ImGui_ImplVulkan_Shutdown, [], :void
     attach_function :ImPool_Add, [:pointer], :pointer
     attach_function :ImPool_Clear, [:pointer], :void
     attach_function :ImPool_Contains, [:pointer, :pointer], :bool

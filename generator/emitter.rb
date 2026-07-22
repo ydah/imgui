@@ -20,6 +20,8 @@ module ImGuiRuby
         @output_dir = output_dir
         @overrides = YAML.safe_load_file(overrides_path, aliases: false) || {}
         @definitions = read_json("definitions.json")
+        implementation_path = File.join(@metadata_dir, "impl_definitions.json")
+        @definitions = @definitions.merge(JSON.parse(File.read(implementation_path))) if File.file?(implementation_path)
         @types = read_json("structs_and_enums.json")
         @typedefs = read_json("typedefs_dict.json")
         @structs = @types.fetch("structs")
