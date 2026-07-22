@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "surfaces": {
+    "ImGui": {
+      "method_count": 387,
+      "sha256": "2a530e9c72597da0b6095c9a71626fc379c354d596acd0b02946a1069419844c"
+    },
+    "ImPlot": {
+      "method_count": 21,
+      "sha256": "d17bd05b4d1f92b4a2c12af3ebacead53d4c8c3d73c969b7b1b170a259e1e702"
+    },
+    "ImGui::Backends::Glfw": {
+      "method_count": 8,
+      "sha256": "7fe06d1fe8a70fc5da9506aa35781aee9c93b27886bd1a980109c5e702b8e621"
+    },
+    "ImGui::Backends::OpenGL3": {
+      "method_count": 8,
+      "sha256": "e4c26cc73c9536480f28cac617206774aff663e571979ab0a1e2c87ab593a803"
+    },
+    "ImGui::Backends::SDL3": {
+      "method_count": 12,
+      "sha256": "b125914e0fb9a73aa36fded3c308c67395a564759d521b72a5e03a3f91bf644a"
+    },
+    "ImGui::Backends::WGPU": {
+      "method_count": 5,
+      "sha256": "b84c3315a395d4086fd34f6bd3af3a1d743c51423bac80c8da84dbf60167ab9d"
+    },
+    "ImGui::IO": {
+      "method_count": 40,
+      "sha256": "f7718b34d921f9358a6e982694f2b18998dab1885c465693e81bfe94c2f5fe4f"
+    },
+    "ImGui::Style": {
+      "method_count": 8,
+      "sha256": "45e66164917622943d3318bc0b65230eee280061d4a191a5860d9b897c7a8110"
+    },
+    "ImGui::Fonts": {
+      "method_count": 6,
+      "sha256": "8185515769a642357bb4b10165ce862a264a87f674cd453233cb8f4293aacfa1"
+    },
+    "ImGui::DrawData": {
+      "method_count": 10,
+      "sha256": "1bc1067e5e8fe91bd3b438e1391913164681b35af9cdd60059d5fabf360ec8f8"
+    },
+    "ImGui::Value": {
+      "method_count": 6,
+      "sha256": "edb310c84ff76eca385fd5634b960f9b95245a42498fecbbe0570202a38cc799"
+    }
+  }
+}
