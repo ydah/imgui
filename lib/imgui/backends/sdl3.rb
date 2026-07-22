@@ -12,6 +12,7 @@ module ImGui
       module_function
 
       def init_for_opengl(window, context)
+        prepare_runtime!
         Backends.invoke(
           "SDL3",
           :ImGui_ImplSDL3_InitForOpenGL,
@@ -21,22 +22,27 @@ module ImGui
       end
 
       def init_for_other(window)
+        prepare_runtime!
         Backends.invoke("SDL3", :ImGui_ImplSDL3_InitForOther, Backends.pointer(window))
       end
 
       def init_for_vulkan(window)
+        prepare_runtime!
         Backends.invoke("SDL3", :ImGui_ImplSDL3_InitForVulkan, Backends.pointer(window))
       end
 
       def init_for_d3d(window)
+        prepare_runtime!
         Backends.invoke("SDL3", :ImGui_ImplSDL3_InitForD3D, Backends.pointer(window))
       end
 
       def init_for_metal(window)
+        prepare_runtime!
         Backends.invoke("SDL3", :ImGui_ImplSDL3_InitForMetal, Backends.pointer(window))
       end
 
       def init_for_sdl_renderer(window, renderer)
+        prepare_runtime!
         Backends.invoke(
           "SDL3",
           :ImGui_ImplSDL3_InitForSDLRenderer,
@@ -46,6 +52,7 @@ module ImGui
       end
 
       def init_for_sdl_gpu(window)
+        prepare_runtime!
         Backends.invoke("SDL3", :ImGui_ImplSDL3_InitForSDLGPU, Backends.pointer(window))
       end
 
@@ -105,6 +112,22 @@ module ImGui
         end
       end
       private_class_method :normalize_gamepad_mode
+
+      def prepare_runtime!
+        candidates = [ENV["IMGUI_RUBY_SDL3_LIB"]]
+        candidates.concat(::SDL3::Raw.ffi_libraries.map(&:name)) if defined?(::SDL3::Raw)
+        candidates.concat(
+          if FFI::Platform.windows?
+            %w[SDL3.dll]
+          elsif FFI::Platform.mac?
+            %w[libSDL3.dylib SDL3.framework/SDL3 /opt/homebrew/lib/libSDL3.dylib /usr/local/lib/libSDL3.dylib]
+          else
+            %w[libSDL3.so.0 libSDL3.so]
+          end
+        )
+        Backends.load_runtime_library("SDL3", candidates)
+      end
+      private_class_method :prepare_runtime!
     end
   end
 end

@@ -152,10 +152,10 @@ IMGUI_RUBY_BACKENDS=glfw,opengl3 bundle exec rake native:build
 
 Backend symbols are resolved on first use, so a core-only library remains
 usable for headless operation. Calling a backend omitted from the native
-library raises `ImGui::BackendUnavailableError`. On Unix, an already loaded
-GLFW or SDL3 shared library is promoted for backend symbol resolution. WebGPU
-uses an explicit function table and does not link against a particular
-wgpu-native release.
+library raises `ImGui::BackendUnavailableError`. GLFW and SDL3 calls use a
+validated runtime loader on every supported OS, so the native gem does not
+link either optional library. WebGPU uses an explicit function table and does
+not link against a particular wgpu-native release.
 
 ### SDL3
 

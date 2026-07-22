@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe ImGui::Backends do
+  before do
+    allow(ImGui::Backends::Glfw).to receive(:prepare_runtime!)
+    allow(ImGui::Backends::SDL3).to receive(:prepare_runtime!)
+  end
+
   it "extracts native pointers from backend objects" do
     pointer = FFI::MemoryPointer.new(:char, 1)
     window = Struct.new(:handle).new(pointer)
@@ -78,6 +83,23 @@ RSpec.describe ImGui::Backends do
     end
 
     ImGui::Backends::SDL3.set_gamepad_mode(:manual, gamepads: [gamepad])
+  end
+
+  it "loads and validates a platform backend runtime library" do
+    allow(ImGui).to receive(:guard_context!)
+    allow(ImGui::Native).to receive(:imgui_ruby_backend_library_ready).and_return(false, true)
+    expect(ImGui::Native).to receive(:imgui_ruby_backend_load_library)
+      .with("GLFW", "/runtime/glfw")
+      .and_return(true)
+    allow(ImGui::Native).to receive(:imgui_ruby_backend_required_function_count).with("GLFW").and_return(1)
+    allow(ImGui::Native).to receive(:imgui_ruby_backend_required_function_name)
+      .with("GLFW", 0)
+      .and_return("glfwGetTime")
+    allow(ImGui::Native).to receive(:imgui_ruby_backend_has_function)
+      .with("GLFW", "glfwGetTime")
+      .and_return(true)
+
+    expect(described_class.load_runtime_library("GLFW", ["/runtime/glfw"])).to be(true)
   end
 
   it "configures WGPU through a runtime function table" do

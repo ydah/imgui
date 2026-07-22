@@ -8,11 +8,7 @@ namespace :gem do
   desc "Build a gem with the native library for the current platform"
   task :platform do
     root = File.expand_path("..", __dir__)
-    ENV["IMGUI_RUBY_BACKENDS"] ||= if Gem.win_platform?
-                                      "opengl3,wgpu"
-                                    else
-                                      "glfw,opengl3,sdl3,wgpu"
-                                    end
+    ENV["IMGUI_RUBY_BACKENDS"] ||= "glfw,opengl3,sdl3,wgpu"
     Rake::Task["native:build"].invoke
     install_root = File.join(root, "tmp", "native-install")
     library = Dir.glob(File.join(install_root, "*cimgui_ruby.{so,dylib,dll}")).first

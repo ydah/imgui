@@ -23,7 +23,6 @@ module ImGui
       def load!(path: nil)
         return loaded_path if loaded?
 
-        promote_loaded_backend_libraries!
         failures = []
         library_candidates(path).each do |candidate|
           begin
@@ -73,32 +72,10 @@ module ImGui
         "lib#{LIBRARY_BASENAME}.#{FFI::Platform::LIBSUFFIX}"
       end
 
-      def promote_loaded_backend_libraries!
-        flags = FFI::DynamicLibrary::RTLD_LAZY | FFI::DynamicLibrary::RTLD_GLOBAL
-        loaded_backend_library_paths.each do |library_path|
-          @promoted_backend_paths ||= []
-          next if @promoted_backend_paths.include?(library_path)
-
-          (@promoted_backend_libraries ||= []) << FFI::DynamicLibrary.open(library_path, flags)
-          @promoted_backend_paths << library_path
-        rescue LoadError
-          # The platform backend remains optional. Native backend calls provide
-          # the actionable error if its symbols cannot be resolved later.
-        end
-        true
-      end
-
       private
 
       def function_signatures
         @function_signatures ||= {}
-      end
-
-      def loaded_backend_library_paths
-        paths = [ENV["IMGUI_RUBY_GLFW_LIB"], ENV["IMGUI_RUBY_SDL3_LIB"]]
-        paths.concat(::GLFW::API.ffi_libraries.map(&:name)) if defined?(::GLFW::API)
-        paths.concat(::SDL3::Raw.ffi_libraries.map(&:name)) if defined?(::SDL3::Raw)
-        paths.compact.reject(&:empty?).uniq
       end
 
       def registered_function_names

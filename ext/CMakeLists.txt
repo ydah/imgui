@@ -46,8 +46,10 @@ endif()
 
 if(IMGUI_RUBY_WITH_GLFW)
   list(APPEND IMGUI_RUBY_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/backend_function_bridge.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/glfw_vulkan_bridge.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/imgui_ruby_glfw.cpp"
     "${CIMGUI_DIR}/cimgui_impl.cpp"
-    "${IMGUI_DIR}/backends/imgui_impl_glfw.cpp"
   )
   list(APPEND IMGUI_RUBY_BACKEND_DEFINITIONS CIMGUI_USE_GLFW)
 endif()
@@ -65,8 +67,9 @@ if(IMGUI_RUBY_WITH_SDL3)
     message(FATAL_ERROR "SDL submodule is missing; run git submodule update --init --recursive")
   endif()
   list(APPEND IMGUI_RUBY_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/backend_function_bridge.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/imgui_ruby_sdl3.cpp"
     "${CIMGUI_DIR}/cimgui_impl.cpp"
-    "${IMGUI_DIR}/backends/imgui_impl_sdl3.cpp"
   )
   list(APPEND IMGUI_RUBY_BACKEND_DEFINITIONS CIMGUI_USE_SDL3)
 endif()
@@ -101,9 +104,7 @@ target_compile_definitions(cimgui_ruby PRIVATE
   ${IMGUI_RUBY_BACKEND_DEFINITIONS}
 )
 
-if(APPLE AND (IMGUI_RUBY_WITH_GLFW OR IMGUI_RUBY_WITH_OPENGL3 OR IMGUI_RUBY_WITH_SDL3 OR IMGUI_RUBY_WITH_WGPU))
-  target_link_options(cimgui_ruby PRIVATE "-undefined" "dynamic_lookup")
-endif()
+target_link_libraries(cimgui_ruby PRIVATE ${CMAKE_DL_LIBS})
 
 set_target_properties(cimgui_ruby PROPERTIES OUTPUT_NAME cimgui_ruby)
 install(TARGETS cimgui_ruby
