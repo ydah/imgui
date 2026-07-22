@@ -9,6 +9,7 @@ io.ini_filename = nil
 io.display_size = [320, 240]
 io.delta_time = 1.0 / 60
 io.fonts.add_font_default
+io.fonts.build
 
 library = WGPU::Native.ffi_libraries.first
 ImGui::Backends::WGPU.__send__(:configure_function_table!, library)
@@ -45,10 +46,16 @@ texture = device.create_texture(
 view = texture.create_view
 encoder = device.create_command_encoder(label: "imgui-ruby encoder")
 
-ImGui::Backends::WGPU.new_frame
-ImGui.new_frame
-ImGui.window("WGPU") { ImGui.text("function-table bridge") }
-ImGui.render
+2.times do
+  ImGui::Backends::WGPU.new_frame
+  ImGui.new_frame
+  ImGui.window("WGPU") { ImGui.text("function-table bridge") }
+  ImGui.render
+end
+
+unless ImGui.draw_data.total_vertex_count.positive?
+  raise "WGPU backend produced no vertices"
+end
 
 unless ImGui::Backends::WGPU.render_draw_data(ImGui.draw_data, encoder, view)
   raise "failed to encode ImGui WGPU draw data"
