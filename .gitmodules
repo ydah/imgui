@@ -2,3 +2,12 @@
 	path = generator/vendor/cimgui
 	url = https://github.com/cimgui/cimgui.git
 	branch = docking_inter
+[submodule "generator/vendor/cimplot"]
+	path = generator/vendor/cimplot
+	url = https://github.com/cimgui/cimplot.git
+[submodule "generator/vendor/webgpu"]
+	path = generator/vendor/webgpu
+	url = https://github.com/webgpu-native/webgpu-headers.git
+[submodule "generator/vendor/sdl"]
+	path = generator/vendor/sdl
+	url = https://github.com/libsdl-org/SDL.git
