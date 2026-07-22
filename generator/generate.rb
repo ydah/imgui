@@ -31,3 +31,16 @@ ImGuiRuby::Generator::ApiEmitter.new(
   output_path: File.join(root, "lib", "imgui", "api_generated.rb"),
   overrides_path: options.fetch(:overrides)
 ).generate!
+
+plot_metadata = File.join(__dir__, "vendor", "cimplot", "generator", "output")
+if File.directory?(plot_metadata)
+  ImGuiRuby::Generator::Emitter.new(
+    metadata_dir: plot_metadata,
+    output_dir: File.join(root, "lib", "imgui", "plot", "native"),
+    overrides_path: options.fetch(:overrides),
+    dependency_metadata_dirs: [options.fetch(:metadata)],
+    public_module: "ImPlot",
+    public_enum_prefix: "ImPlot",
+    predeclare_structs: true
+  ).generate!
+end

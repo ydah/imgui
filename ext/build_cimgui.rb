@@ -27,7 +27,9 @@ module ImGuiRuby
         "-DCMAKE_BUILD_TYPE=Release",
         "-DIMGUI_RUBY_WITH_GLFW=#{on_off(backends.include?("glfw"))}",
         "-DIMGUI_RUBY_WITH_OPENGL3=#{on_off(backends.include?("opengl3"))}",
-        "-DIMGUI_RUBY_WITH_SDL3=#{on_off(backends.include?("sdl3"))}"
+        "-DIMGUI_RUBY_WITH_SDL3=#{on_off(backends.include?("sdl3"))}",
+        "-DIMGUI_RUBY_WITH_WGPU=#{on_off(backends.include?("wgpu"))}",
+        "-DIMGUI_RUBY_WITH_IMPLOT=#{on_off(!backends.include?("no-implot"))}"
       ]
     end
 

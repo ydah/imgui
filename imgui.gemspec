@@ -27,6 +27,11 @@ Gem::Specification.new do |spec|
     "generator/vendor/cimgui/{cimgui.cpp,cimgui.h,cimgui_impl.cpp,cimgui_impl.h,cimconfig.h," \
     "imgui/{*.cpp,*.h,backends/*.{cpp,h},examples/libs/glfw/include/GLFW/*.h}}"
   )
+  vendored_sources |= Dir.glob(
+    "generator/vendor/cimplot/{cimplot.cpp,cimplot.h,implot/{implot.cpp,implot_demo.cpp,implot.h,implot_internal.h,implot_items.cpp}}"
+  )
+  vendored_sources |= Dir.glob("generator/vendor/sdl/include/SDL3/*.h")
+  vendored_sources |= Dir.glob("generator/vendor/webgpu/{webgpu.h,LICENSE}")
   spec.files |= vendored_sources
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |file| File.basename(file) }

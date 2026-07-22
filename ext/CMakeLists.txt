@@ -8,10 +8,15 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 option(IMGUI_RUBY_WITH_GLFW "Compile the Dear ImGui GLFW backend" OFF)
 option(IMGUI_RUBY_WITH_OPENGL3 "Compile the Dear ImGui OpenGL3 backend" OFF)
 option(IMGUI_RUBY_WITH_SDL3 "Compile the Dear ImGui SDL3 backend" OFF)
+option(IMGUI_RUBY_WITH_IMPLOT "Compile the bundled ImPlot extension" ON)
+option(IMGUI_RUBY_WITH_WGPU "Compile the Dear ImGui WebGPU backend" OFF)
 
 get_filename_component(IMGUI_RUBY_ROOT "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 set(CIMGUI_DIR "${IMGUI_RUBY_ROOT}/generator/vendor/cimgui")
 set(IMGUI_DIR "${CIMGUI_DIR}/imgui")
+set(CIMPLOT_DIR "${IMGUI_RUBY_ROOT}/generator/vendor/cimplot")
+set(SDL_DIR "${IMGUI_RUBY_ROOT}/generator/vendor/sdl")
+set(WEBGPU_HEADERS_DIR "${IMGUI_RUBY_ROOT}/generator/vendor")
 
 if(NOT EXISTS "${CIMGUI_DIR}/cimgui.cpp")
   message(FATAL_ERROR "cimgui submodule is missing; run git submodule update --init --recursive")
@@ -27,6 +32,18 @@ set(IMGUI_RUBY_SOURCES
 )
 
 set(IMGUI_RUBY_BACKEND_DEFINITIONS)
+if(IMGUI_RUBY_WITH_IMPLOT)
+  if(NOT EXISTS "${CIMPLOT_DIR}/cimplot.cpp")
+    message(FATAL_ERROR "cimplot submodule is missing; run git submodule update --init --recursive")
+  endif()
+  list(APPEND IMGUI_RUBY_SOURCES
+    "${CIMPLOT_DIR}/cimplot.cpp"
+    "${CIMPLOT_DIR}/implot/implot.cpp"
+    "${CIMPLOT_DIR}/implot/implot_demo.cpp"
+    "${CIMPLOT_DIR}/implot/implot_items.cpp"
+  )
+endif()
+
 if(IMGUI_RUBY_WITH_GLFW)
   list(APPEND IMGUI_RUBY_SOURCES
     "${CIMGUI_DIR}/cimgui_impl.cpp"
@@ -44,6 +61,9 @@ if(IMGUI_RUBY_WITH_OPENGL3)
 endif()
 
 if(IMGUI_RUBY_WITH_SDL3)
+  if(NOT EXISTS "${SDL_DIR}/include/SDL3/SDL.h")
+    message(FATAL_ERROR "SDL submodule is missing; run git submodule update --init --recursive")
+  endif()
   list(APPEND IMGUI_RUBY_SOURCES
     "${CIMGUI_DIR}/cimgui_impl.cpp"
     "${IMGUI_DIR}/backends/imgui_impl_sdl3.cpp"
@@ -58,6 +78,10 @@ target_include_directories(cimgui_ruby PRIVATE
   "${IMGUI_DIR}"
   "${IMGUI_DIR}/backends"
   "${IMGUI_DIR}/examples/libs/glfw/include"
+  "${CIMPLOT_DIR}"
+  "${CIMPLOT_DIR}/implot"
+  "${SDL_DIR}/include"
+  "${WEBGPU_HEADERS_DIR}"
 )
 target_compile_definitions(cimgui_ruby PRIVATE
   IMGUI_DISABLE_OBSOLETE_FUNCTIONS=1
@@ -65,7 +89,7 @@ target_compile_definitions(cimgui_ruby PRIVATE
   ${IMGUI_RUBY_BACKEND_DEFINITIONS}
 )
 
-if(APPLE AND (IMGUI_RUBY_WITH_GLFW OR IMGUI_RUBY_WITH_OPENGL3))
+if(APPLE AND (IMGUI_RUBY_WITH_GLFW OR IMGUI_RUBY_WITH_OPENGL3 OR IMGUI_RUBY_WITH_SDL3 OR IMGUI_RUBY_WITH_WGPU))
   target_link_options(cimgui_ruby PRIVATE "-undefined" "dynamic_lookup")
 endif()
 

@@ -23,10 +23,11 @@ module ImGuiRuby
         "ptrdiff_t" => ":ptrdiff_t"
       }.freeze
 
-      def initialize(typedefs:, structs:, enum_types:)
+      def initialize(typedefs:, structs:, enum_types:, struct_references: {})
         @typedefs = typedefs
         @structs = structs
         @enum_types = enum_types
+        @struct_references = struct_references
       end
 
       def ffi_type(c_type, member: nil)
@@ -63,10 +64,10 @@ module ImGuiRuby
         bare = type.sub(/\Aconst\s+/, "").strip
         return PRIMITIVES.fetch(bare) if PRIMITIVES.key?(bare)
         return ":int" if enum_type?(bare)
-        return "#{bare}.by_value" if @structs.key?(bare)
+        return "#{struct_reference(bare)}.by_value" if @structs.key?(bare)
 
         template_base = bare.split("_").first
-        return "#{template_base}.by_value" if @structs.key?(template_base)
+        return "#{struct_reference(template_base)}.by_value" if @structs.key?(template_base)
 
         resolved = @typedefs[bare]
         return ":#{bare}" if resolved && callback?(resolved)
@@ -99,6 +100,10 @@ module ImGuiRuby
       def array_size_from(type)
         match = type.match(/\[([^\]]+)\]\z/)
         match && match[1]
+      end
+
+      def struct_reference(name)
+        @struct_references.fetch(name, name)
       end
     end
   end
