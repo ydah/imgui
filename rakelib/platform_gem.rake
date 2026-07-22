@@ -25,10 +25,16 @@ namespace :gem do
     FileUtils.mkdir_p(package_dir)
 
     specification = Gem::Specification.load(File.join(root, "imgui.gemspec"))
-    specification.platform = Gem::Platform.local
+    local_platform = Gem::Platform.local
+    specification.platform = if %w[darwin linux].include?(local_platform.os)
+                               cpu = local_platform.cpu == "aarch64" ? "arm64" : local_platform.cpu
+                               Gem::Platform.new("#{cpu}-#{local_platform.os}")
+                             else
+                               local_platform
+                             end
     specification.extensions = []
     specification.files = specification.files.reject do |file|
-      file.start_with?("ext/", "generator/vendor/cimgui") || file == ".gitmodules"
+      file.start_with?("ext/", "generator/vendor/") || file == ".gitmodules"
     end
 
     platform = "#{FFI::Platform::ARCH}-#{FFI::Platform::OS}"

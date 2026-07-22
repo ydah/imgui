@@ -1,4 +1,4 @@
-name: Ruby
+name: CI
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
         ruby: ["3.2", "4.0"]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
           submodules: recursive
@@ -36,6 +36,24 @@ jobs:
           git diff --exit-code
       - name: Run native headless smoke test
         run: bundle exec rake native:spec
+      - name: Audit generated native symbols
+        if: matrix.ruby == '4.0' && runner.os != 'Windows'
+        run: bundle exec rake native:audit
+      - name: Install Linux integration dependencies
+        if: matrix.ruby == '4.0' && runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libglfw3 libgl1-mesa-dev xvfb
+          gem install glfw-ruby sdl3 --no-document
+          cmake -S generator/vendor/sdl -B tmp/sdl-build -DSDL_SHARED=ON -DSDL_STATIC=OFF -DSDL_TEST_LIBRARY=OFF
+          cmake --build tmp/sdl-build --parallel
+          cmake --install tmp/sdl-build --prefix "$PWD/tmp/sdl-install"
+      - name: Run GLFW/OpenGL3 and SDL3 integration
+        if: matrix.ruby == '4.0' && runner.os == 'Linux'
+        env:
+          LD_LIBRARY_PATH: ${{ github.workspace }}/tmp/sdl-install/lib
+          SDL_VIDEODRIVER: x11
+        run: xvfb-run -a bundle exec rake native:integration
       - name: Build platform gem
         if: matrix.ruby == '4.0'
         run: bundle exec rake gem:platform
@@ -49,7 +67,7 @@ jobs:
     name: Package source gem
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
           submodules: recursive

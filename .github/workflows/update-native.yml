@@ -1,0 +1,64 @@
+name: Update native dependencies
+
+on:
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-native-dependencies
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+      - name: Update submodules
+        run: git submodule update --remote --recursive
+      - name: Regenerate bindings
+        run: bundle exec rake generate
+      - name: Run compatibility and native tests
+        run: |
+          bundle exec rake spec
+          bundle exec rake native:spec
+          bundle exec rake native:audit
+      - name: Create or update pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATE_BRANCH: automation/update-native-dependencies
+        run: |
+          if test -z "$(git status --porcelain)"; then
+            echo "Native dependencies are already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$UPDATE_BRANCH"
+          git add .
+          git commit -m "Update native dependencies"
+          git push --force origin "HEAD:$UPDATE_BRANCH"
+
+          if gh pr view "$UPDATE_BRANCH" >/dev/null 2>&1; then
+            gh pr edit "$UPDATE_BRANCH" \
+              --title "Update native dependencies" \
+              --body "Updates pinned native submodules, regenerates bindings, and passes the compatibility and native suites."
+          else
+            gh pr create \
+              --base main \
+              --head "$UPDATE_BRANCH" \
+              --title "Update native dependencies" \
+              --body "Updates pinned native submodules, regenerates bindings, and passes the compatibility and native suites."
+          fi

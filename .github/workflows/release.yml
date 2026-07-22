@@ -1,0 +1,95 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions: {}
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          submodules: recursive
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+      - name: Verify tag version
+        run: test "v$(ruby -Ilib -rimgui/version -e 'print ImGui::VERSION')" = "$GITHUB_REF_NAME"
+      - run: bundle exec rake build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gem-source
+          path: pkg/*.gem
+
+  platform:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            artifact: x86_64-linux
+          - runner: ubuntu-24.04-arm
+            artifact: aarch64-linux
+          - runner: macos-latest
+            artifact: arm64-darwin
+          - runner: macos-15-intel
+            artifact: x86_64-darwin
+          - runner: windows-latest
+            artifact: x64-mingw-ucrt
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          submodules: recursive
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+      - run: bundle exec rake gem:platform
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gem-${{ matrix.artifact }}
+          path: pkg/*.gem
+
+  publish:
+    needs: [source, platform]
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "4.0"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: gem-*
+          path: pkg
+          merge-multiple: true
+      - name: Configure RubyGems trusted publishing
+        uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a
+      - name: Publish gems
+        shell: bash
+        run: |
+          for package in pkg/*.gem; do
+            gem push "$package"
+          done
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" pkg/*.gem --generate-notes --verify-tag
