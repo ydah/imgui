@@ -2,6 +2,7 @@
 
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
+require "rbconfig"
 
 desc "Generate FFI declarations from cimgui metadata"
 task :generate do
@@ -37,5 +38,41 @@ namespace :native do
     ruby "-Ilib", "spec/native_smoke.rb"
   ensure
     ENV["IMGUI_RUBY_LIB"] = previous_library
+  end
+
+
+  desc "Build all supported backends and attach every generated native function"
+  task :audit do
+    previous_backends = ENV["IMGUI_RUBY_BACKENDS"]
+    ENV["IMGUI_RUBY_BACKENDS"] = "glfw,opengl3,sdl3,wgpu"
+    Rake::Task["native:build"].invoke
+    library = Dir.glob(File.join(install_root, "*cimgui_ruby.{so,dylib,dll}")).first
+    raise "built cimgui library was not found" unless library
+
+    previous_library = ENV["IMGUI_RUBY_LIB"]
+    ENV["IMGUI_RUBY_LIB"] = library
+    ruby "-Ilib", "spec/native_symbol_audit.rb"
+  ensure
+    ENV["IMGUI_RUBY_BACKENDS"] = previous_backends
+    ENV["IMGUI_RUBY_LIB"] = previous_library
+  end
+
+  desc "Run real GLFW/OpenGL3 and SDL3 backend frames"
+  task :integration do
+    previous_backends = ENV["IMGUI_RUBY_BACKENDS"]
+    ENV["IMGUI_RUBY_BACKENDS"] = "glfw,opengl3,sdl3,wgpu"
+    Rake::Task["native:build"].invoke
+    library = Dir.glob(File.join(install_root, "*cimgui_ruby.{so,dylib,dll}")).first
+    raise "built cimgui library was not found" unless library
+
+    require "bundler"
+    Bundler.with_unbundled_env do
+      sh({ "IMGUI_RUBY_LIB" => library, "IMGUI_RUBY_REQUIRE_GLFW" => "1" },
+         RbConfig.ruby, "-Ilib", "spec/glfw_opengl_smoke.rb")
+      sh({ "IMGUI_RUBY_LIB" => library, "IMGUI_RUBY_REQUIRE_SDL3" => "1" },
+         RbConfig.ruby, "-Ilib", "spec/sdl3_smoke.rb")
+    end
+  ensure
+    ENV["IMGUI_RUBY_BACKENDS"] = previous_backends
   end
 end

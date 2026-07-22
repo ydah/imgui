@@ -20,6 +20,22 @@ module ImGui
         Backends.invoke("OpenGL3", :ImGui_ImplOpenGL3_RenderDrawData, pointer)
       end
 
+      def create_device_objects
+        Backends.invoke("OpenGL3", :ImGui_ImplOpenGL3_CreateDeviceObjects)
+      end
+
+      def destroy_device_objects
+        Backends.invoke("OpenGL3", :ImGui_ImplOpenGL3_DestroyDeviceObjects)
+      end
+
+      def create_fonts_texture
+        Backends.invoke("OpenGL3", :ImGui_ImplOpenGL3_CreateFontsTexture)
+      end
+
+      def destroy_fonts_texture
+        Backends.invoke("OpenGL3", :ImGui_ImplOpenGL3_DestroyFontsTexture)
+      end
+
       def shutdown
         Backends.invoke("OpenGL3", :ImGui_ImplOpenGL3_Shutdown)
       end

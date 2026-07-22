@@ -23,7 +23,8 @@ end.parse!
 ImGuiRuby::Generator::Emitter.new(
   metadata_dir: options.fetch(:metadata),
   output_dir: options.fetch(:output),
-  overrides_path: options.fetch(:overrides)
+  overrides_path: options.fetch(:overrides),
+  implementation_prefixes: %w[ImGui_ImplGlfw_ ImGui_ImplOpenGL3_ ImGui_ImplSDL3_]
 ).generate!
 
 ImGuiRuby::Generator::ApiEmitter.new(

@@ -17,6 +17,15 @@ RSpec.describe ImGui::Backends do
     expect(ImGui::Backends::Glfw.init_for_opengl(pointer)).to be(true)
   end
 
+  it "supports callback-free GLFW initialization" do
+    pointer = FFI::MemoryPointer.new(:char, 1)
+    expect(described_class).to receive(:invoke)
+      .with("GLFW", :ImGui_ImplGlfw_InitForOther, pointer, false)
+      .and_return(true)
+
+    expect(ImGui::Backends::Glfw.init_for_other(pointer, install_callbacks: false)).to be(true)
+  end
+
   it "unwraps DrawData for OpenGL rendering" do
     pointer = FFI::MemoryPointer.new(:char, ImGui::Native::ImDrawData.size)
     draw_data = ImGui::DrawData.new(pointer)
@@ -24,6 +33,17 @@ RSpec.describe ImGui::Backends do
       .with("OpenGL3", :ImGui_ImplOpenGL3_RenderDrawData, pointer)
 
     ImGui::Backends::OpenGL3.render_draw_data(draw_data)
+  end
+
+  it "manages OpenGL device resources explicitly" do
+    expect(described_class).to receive(:invoke)
+      .with("OpenGL3", :ImGui_ImplOpenGL3_CreateDeviceObjects)
+      .and_return(true)
+    expect(described_class).to receive(:invoke)
+      .with("OpenGL3", :ImGui_ImplOpenGL3_DestroyDeviceObjects)
+
+    expect(ImGui::Backends::OpenGL3.create_device_objects).to be(true)
+    ImGui::Backends::OpenGL3.destroy_device_objects
   end
 
   it "exposes every SDL3 renderer initialization mode" do

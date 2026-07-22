@@ -2,6 +2,8 @@
 skip:
   - igText
   - igTextColored
+  - ImGuiFreeType_GetBuilderForFreeType
+  - ImGuiFreeType_SetAllocatorFunctions
 rename:
   igGetIO_Nil: igGetIO
 varargs_via_preformat:

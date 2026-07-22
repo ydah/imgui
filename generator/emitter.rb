@@ -22,7 +22,8 @@ module ImGuiRuby
         dependency_metadata_dirs: [],
         public_module: "ImGui",
         public_enum_prefix: nil,
-        predeclare_structs: false
+        predeclare_structs: false,
+        implementation_prefixes: nil
       )
         @metadata_dir = metadata_dir
         @output_dir = output_dir
@@ -32,7 +33,15 @@ module ImGuiRuby
         @overrides = YAML.safe_load_file(overrides_path, aliases: false) || {}
         @definitions = read_json("definitions.json")
         implementation_path = File.join(@metadata_dir, "impl_definitions.json")
-        @definitions = @definitions.merge(JSON.parse(File.read(implementation_path))) if File.file?(implementation_path)
+        if File.file?(implementation_path)
+          implementations = JSON.parse(File.read(implementation_path))
+          if implementation_prefixes
+            implementations.select! do |name, _definitions|
+              implementation_prefixes.any? { |prefix| name.start_with?(prefix) }
+            end
+          end
+          @definitions = @definitions.merge(implementations)
+        end
         @types = read_json("structs_and_enums.json")
         @typedefs = read_json("typedefs_dict.json")
         @structs = @types.fetch("structs")
@@ -160,7 +169,7 @@ module ImGuiRuby
         renames = @overrides.fetch("rename", {})
         declarations = @definitions.values.flatten.filter_map do |definition|
           name = definition["ov_cimguiname"] || definition.fetch("cimguiname")
-          next if definition["skipped"] || definition["isvararg"] || skipped.include?(name)
+          next if definition["skipped"] || definition["templated"] || definition["isvararg"] || skipped.include?(name)
 
           arguments = Array(definition["argsT"]).map do |argument|
             @mapper.ffi_type(argument.fetch("type"))

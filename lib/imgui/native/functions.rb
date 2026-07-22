@@ -5,30 +5,11 @@
 
 module ImGui
   module Native
-    attach_function :ImBitArray_ClearAllBits, [:pointer], :void
-    attach_function :ImBitArray_ClearBit, [:pointer, :int], :void
-    attach_function :ImBitArray_ImBitArray, [], :pointer
-    attach_function :ImBitArray_SetAllBits, [:pointer], :void
-    attach_function :ImBitArray_SetBit, [:pointer, :int], :void
-    attach_function :ImBitArray_SetBitRange, [:pointer, :int, :int], :void
-    attach_function :ImBitArray_TestBit, [:pointer, :int], :bool
-    attach_function :ImBitArray_destroy, [:pointer], :void
     attach_function :ImBitVector_Clear, [:pointer], :void
     attach_function :ImBitVector_ClearBit, [:pointer, :int], :void
     attach_function :ImBitVector_Create, [:pointer, :int], :void
     attach_function :ImBitVector_SetBit, [:pointer, :int], :void
     attach_function :ImBitVector_TestBit, [:pointer, :int], :bool
-    attach_function :ImChunkStream_alloc_chunk, [:pointer, :size_t], :pointer
-    attach_function :ImChunkStream_begin, [:pointer], :pointer
-    attach_function :ImChunkStream_chunk_size, [:pointer, :pointer], :int
-    attach_function :ImChunkStream_clear, [:pointer], :void
-    attach_function :ImChunkStream_empty, [:pointer], :bool
-    attach_function :ImChunkStream_end, [:pointer], :pointer
-    attach_function :ImChunkStream_next_chunk, [:pointer, :pointer], :pointer
-    attach_function :ImChunkStream_offset_from_ptr, [:pointer, :pointer], :int
-    attach_function :ImChunkStream_ptr_from_offset, [:pointer, :int], :pointer
-    attach_function :ImChunkStream_size, [:pointer], :int
-    attach_function :ImChunkStream_swap, [:pointer, :pointer], :void
     attach_function :ImColor_HSV, [:pointer, :float, :float, :float, :float], :void
     attach_function :ImColor_ImColor_Float, [:float, :float, :float, :float], :pointer
     attach_function :ImColor_ImColor_Int, [:int, :int, :int, :int], :pointer
@@ -217,8 +198,6 @@ module ImGui
     attach_function :ImGuiDockNode_destroy, [:pointer], :void
     attach_function :ImGuiErrorRecoveryState_ImGuiErrorRecoveryState, [], :pointer
     attach_function :ImGuiErrorRecoveryState_destroy, [:pointer], :void
-    attach_function :ImGuiFreeType_GetBuilderForFreeType, [], :pointer
-    attach_function :ImGuiFreeType_SetAllocatorFunctions, [:pointer, :pointer, :pointer], :void
     attach_function :ImGuiIDStackTool_ImGuiIDStackTool, [], :pointer
     attach_function :ImGuiIDStackTool_destroy, [:pointer], :void
     attach_function :ImGuiIO_AddFocusEvent, [:pointer, :bool], :void
@@ -475,14 +454,6 @@ module ImGui
     attach_function :ImGui_ImplGlfw_Shutdown, [], :void
     attach_function :ImGui_ImplGlfw_Sleep, [:int], :void
     attach_function :ImGui_ImplGlfw_WindowFocusCallback, [:pointer, :int], :void
-    attach_function :ImGui_ImplOpenGL2_CreateDeviceObjects, [], :bool
-    attach_function :ImGui_ImplOpenGL2_CreateFontsTexture, [], :bool
-    attach_function :ImGui_ImplOpenGL2_DestroyDeviceObjects, [], :void
-    attach_function :ImGui_ImplOpenGL2_DestroyFontsTexture, [], :void
-    attach_function :ImGui_ImplOpenGL2_Init, [], :bool
-    attach_function :ImGui_ImplOpenGL2_NewFrame, [], :void
-    attach_function :ImGui_ImplOpenGL2_RenderDrawData, [:pointer], :void
-    attach_function :ImGui_ImplOpenGL2_Shutdown, [], :void
     attach_function :ImGui_ImplOpenGL3_CreateDeviceObjects, [], :bool
     attach_function :ImGui_ImplOpenGL3_CreateFontsTexture, [], :bool
     attach_function :ImGui_ImplOpenGL3_DestroyDeviceObjects, [], :void
@@ -491,16 +462,6 @@ module ImGui
     attach_function :ImGui_ImplOpenGL3_NewFrame, [], :void
     attach_function :ImGui_ImplOpenGL3_RenderDrawData, [:pointer], :void
     attach_function :ImGui_ImplOpenGL3_Shutdown, [], :void
-    attach_function :ImGui_ImplSDL2_InitForD3D, [:pointer], :bool
-    attach_function :ImGui_ImplSDL2_InitForMetal, [:pointer], :bool
-    attach_function :ImGui_ImplSDL2_InitForOpenGL, [:pointer, :pointer], :bool
-    attach_function :ImGui_ImplSDL2_InitForOther, [:pointer], :bool
-    attach_function :ImGui_ImplSDL2_InitForSDLRenderer, [:pointer, :pointer], :bool
-    attach_function :ImGui_ImplSDL2_InitForVulkan, [:pointer], :bool
-    attach_function :ImGui_ImplSDL2_NewFrame, [], :void
-    attach_function :ImGui_ImplSDL2_ProcessEvent, [:pointer], :bool
-    attach_function :ImGui_ImplSDL2_SetGamepadMode, [:int, :pointer, :int], :void
-    attach_function :ImGui_ImplSDL2_Shutdown, [], :void
     attach_function :ImGui_ImplSDL3_InitForD3D, [:pointer], :bool
     attach_function :ImGui_ImplSDL3_InitForMetal, [:pointer], :bool
     attach_function :ImGui_ImplSDL3_InitForOpenGL, [:pointer, :pointer], :bool
@@ -512,41 +473,6 @@ module ImGui
     attach_function :ImGui_ImplSDL3_ProcessEvent, [:pointer], :bool
     attach_function :ImGui_ImplSDL3_SetGamepadMode, [:int, :pointer, :int], :void
     attach_function :ImGui_ImplSDL3_Shutdown, [], :void
-    attach_function :ImGui_ImplVulkanH_CreateOrResizeWindow, [:pointer, :pointer, :pointer, :pointer, :pointer, :pointer, :int, :int, :pointer], :void
-    attach_function :ImGui_ImplVulkanH_DestroyWindow, [:pointer, :pointer, :pointer, :pointer], :void
-    attach_function :ImGui_ImplVulkanH_GetMinImageCountFromPresentMode, [:pointer], :int
-    attach_function :ImGui_ImplVulkanH_SelectPhysicalDevice, [:pointer], :pointer
-    attach_function :ImGui_ImplVulkanH_SelectPresentMode, [:pointer, :pointer, :pointer, :int], :pointer
-    attach_function :ImGui_ImplVulkanH_SelectQueueFamilyIndex, [:pointer], :pointer
-    attach_function :ImGui_ImplVulkanH_SelectSurfaceFormat, [:pointer, :pointer, :pointer, :int, :pointer], :pointer
-    attach_function :ImGui_ImplVulkanH_Window_ImGui_ImplVulkanH_Window, [], :pointer
-    attach_function :ImGui_ImplVulkanH_Window_destroy, [:pointer], :void
-    attach_function :ImGui_ImplVulkan_AddTexture, [:pointer, :pointer, :pointer], :pointer
-    attach_function :ImGui_ImplVulkan_CreateFontsTexture, [], :bool
-    attach_function :ImGui_ImplVulkan_DestroyFontsTexture, [], :void
-    attach_function :ImGui_ImplVulkan_Init, [:pointer], :bool
-    attach_function :ImGui_ImplVulkan_LoadFunctions, [:pointer, :pointer, :pointer], :bool
-    attach_function :ImGui_ImplVulkan_NewFrame, [], :void
-    attach_function :ImGui_ImplVulkan_RemoveTexture, [:pointer], :void
-    attach_function :ImGui_ImplVulkan_RenderDrawData, [:pointer, :pointer, :pointer], :void
-    attach_function :ImGui_ImplVulkan_SetMinImageCount, [:pointer], :void
-    attach_function :ImGui_ImplVulkan_Shutdown, [], :void
-    attach_function :ImPool_Add, [:pointer], :pointer
-    attach_function :ImPool_Clear, [:pointer], :void
-    attach_function :ImPool_Contains, [:pointer, :pointer], :bool
-    attach_function :ImPool_GetAliveCount, [:pointer], :int
-    attach_function :ImPool_GetBufSize, [:pointer], :int
-    attach_function :ImPool_GetByIndex, [:pointer, :int], :pointer
-    attach_function :ImPool_GetByKey, [:pointer, :uint], :pointer
-    attach_function :ImPool_GetIndex, [:pointer, :pointer], :int
-    attach_function :ImPool_GetMapSize, [:pointer], :int
-    attach_function :ImPool_GetOrAddByKey, [:pointer, :uint], :pointer
-    attach_function :ImPool_ImPool, [], :pointer
-    attach_function :ImPool_Remove_PoolIdx, [:pointer, :uint, :int], :void
-    attach_function :ImPool_Remove_TPtr, [:pointer, :uint, :pointer], :void
-    attach_function :ImPool_Reserve, [:pointer, :int], :void
-    attach_function :ImPool_TryGetMapData, [:pointer, :int], :pointer
-    attach_function :ImPool_destroy, [:pointer], :void
     attach_function :ImRect_Add_Rect, [:pointer, ImRect.by_value], :void
     attach_function :ImRect_Add_Vec2, [:pointer, ImVec2.by_value], :void
     attach_function :ImRect_ClipWith, [:pointer, ImRect.by_value], :void
@@ -577,26 +503,6 @@ module ImGui
     attach_function :ImRect_TranslateX, [:pointer, :float], :void
     attach_function :ImRect_TranslateY, [:pointer, :float], :void
     attach_function :ImRect_destroy, [:pointer], :void
-    attach_function :ImSpanAllocator_GetArenaSizeInBytes, [:pointer], :int
-    attach_function :ImSpanAllocator_GetSpanPtrBegin, [:pointer, :int], :pointer
-    attach_function :ImSpanAllocator_GetSpanPtrEnd, [:pointer, :int], :pointer
-    attach_function :ImSpanAllocator_ImSpanAllocator, [], :pointer
-    attach_function :ImSpanAllocator_Reserve, [:pointer, :int, :size_t, :int], :void
-    attach_function :ImSpanAllocator_SetArenaBasePtr, [:pointer, :pointer], :void
-    attach_function :ImSpanAllocator_destroy, [:pointer], :void
-    attach_function :ImSpan_ImSpan_Nil, [], :pointer
-    attach_function :ImSpan_ImSpan_TPtrInt, [:pointer, :int], :pointer
-    attach_function :ImSpan_ImSpan_TPtrTPtr, [:pointer, :pointer], :pointer
-    attach_function :ImSpan_begin_Nil, [:pointer], :pointer
-    attach_function :ImSpan_begin__const, [:pointer], :pointer
-    attach_function :ImSpan_destroy, [:pointer], :void
-    attach_function :ImSpan_end_Nil, [:pointer], :pointer
-    attach_function :ImSpan_end__const, [:pointer], :pointer
-    attach_function :ImSpan_index_from_ptr, [:pointer, :pointer], :int
-    attach_function :ImSpan_set_Int, [:pointer, :pointer, :int], :void
-    attach_function :ImSpan_set_TPtr, [:pointer, :pointer, :pointer], :void
-    attach_function :ImSpan_size, [:pointer], :int
-    attach_function :ImSpan_size_in_bytes, [:pointer], :int
     attach_function :ImVec1_ImVec1_Float, [:float], :pointer
     attach_function :ImVec1_ImVec1_Nil, [], :pointer
     attach_function :ImVec1_destroy, [:pointer], :void
@@ -610,46 +516,6 @@ module ImGui
     attach_function :ImVec4_ImVec4_Float, [:float, :float, :float, :float], :pointer
     attach_function :ImVec4_ImVec4_Nil, [], :pointer
     attach_function :ImVec4_destroy, [:pointer], :void
-    attach_function :ImVector_ImVector_Nil, [], :pointer
-    attach_function :ImVector_ImVector_Vector_T_, [ImVector.by_value], :pointer
-    attach_function :ImVector__grow_capacity, [:pointer, :int], :int
-    attach_function :ImVector_back_Nil, [:pointer], :pointer
-    attach_function :ImVector_back__const, [:pointer], :pointer
-    attach_function :ImVector_begin_Nil, [:pointer], :pointer
-    attach_function :ImVector_begin__const, [:pointer], :pointer
-    attach_function :ImVector_capacity, [:pointer], :int
-    attach_function :ImVector_clear, [:pointer], :void
-    attach_function :ImVector_clear_delete, [:pointer], :void
-    attach_function :ImVector_clear_destruct, [:pointer], :void
-    attach_function :ImVector_contains, [:pointer, :pointer], :bool
-    attach_function :ImVector_destroy, [:pointer], :void
-    attach_function :ImVector_empty, [:pointer], :bool
-    attach_function :ImVector_end_Nil, [:pointer], :pointer
-    attach_function :ImVector_end__const, [:pointer], :pointer
-    attach_function :ImVector_erase_Nil, [:pointer, :pointer], :pointer
-    attach_function :ImVector_erase_TPtr, [:pointer, :pointer, :pointer], :pointer
-    attach_function :ImVector_erase_unsorted, [:pointer, :pointer], :pointer
-    attach_function :ImVector_find_Nil, [:pointer, :pointer], :pointer
-    attach_function :ImVector_find__const, [:pointer, :pointer], :pointer
-    attach_function :ImVector_find_erase, [:pointer, :pointer], :bool
-    attach_function :ImVector_find_erase_unsorted, [:pointer, :pointer], :bool
-    attach_function :ImVector_find_index, [:pointer, :pointer], :int
-    attach_function :ImVector_front_Nil, [:pointer], :pointer
-    attach_function :ImVector_front__const, [:pointer], :pointer
-    attach_function :ImVector_index_from_ptr, [:pointer, :pointer], :int
-    attach_function :ImVector_insert, [:pointer, :pointer, :pointer], :pointer
-    attach_function :ImVector_max_size, [:pointer], :int
-    attach_function :ImVector_pop_back, [:pointer], :void
-    attach_function :ImVector_push_back, [:pointer, :pointer], :void
-    attach_function :ImVector_push_front, [:pointer, :pointer], :void
-    attach_function :ImVector_reserve, [:pointer, :int], :void
-    attach_function :ImVector_reserve_discard, [:pointer, :int], :void
-    attach_function :ImVector_resize_Nil, [:pointer, :int], :void
-    attach_function :ImVector_resize_T, [:pointer, :int, :pointer], :void
-    attach_function :ImVector_shrink, [:pointer, :int], :void
-    attach_function :ImVector_size, [:pointer], :int
-    attach_function :ImVector_size_in_bytes, [:pointer], :int
-    attach_function :ImVector_swap, [:pointer, :pointer], :void
     attach_function :igAcceptDragDropPayload, [:string, :int], :pointer
     attach_function :igActivateItemByID, [:uint], :void
     attach_function :igAddContextHook, [:pointer, :pointer], :uint
