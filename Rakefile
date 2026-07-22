@@ -57,7 +57,7 @@ namespace :native do
     ENV["IMGUI_RUBY_LIB"] = previous_library
   end
 
-  desc "Run real GLFW/OpenGL3 and SDL3 backend frames"
+  desc "Run GLFW/OpenGL3, SDL3, and WGPU backend integration frames"
   task :integration do
     previous_backends = ENV["IMGUI_RUBY_BACKENDS"]
     ENV["IMGUI_RUBY_BACKENDS"] = "glfw,opengl3,sdl3,wgpu"
@@ -71,6 +71,8 @@ namespace :native do
          RbConfig.ruby, "-Ilib", "spec/glfw_opengl_smoke.rb")
       sh({ "IMGUI_RUBY_LIB" => library, "IMGUI_RUBY_REQUIRE_SDL3" => "1" },
          RbConfig.ruby, "-Ilib", "spec/sdl3_smoke.rb")
+      sh({ "IMGUI_RUBY_LIB" => library },
+         RbConfig.ruby, "-Ilib", "spec/wgpu_smoke.rb")
     end
   ensure
     ENV["IMGUI_RUBY_BACKENDS"] = previous_backends

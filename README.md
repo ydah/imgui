@@ -247,10 +247,10 @@ bundle exec rake generate
 
 `native:spec` builds cimgui and executes two real headless frames.
 `native:audit` builds every supported backend and attaches all generated
-symbols. `native:integration` runs real GLFW/OpenGL3 and SDL3 frames when the
-optional gems and system libraries are installed. To build the source gem use
-`bundle exec rake build`; `bundle exec rake gem:platform` builds a gem
-containing the native library for the current platform.
+symbols. `native:integration` runs GLFW/OpenGL3, SDL3, and WGPU integration
+frames when the optional gems and system libraries are installed. To build the
+source gem use `bundle exec rake build`; `bundle exec rake gem:platform`
+builds a gem containing the native library for the current platform.
 
 The weekly update workflow advances the pinned submodules, regenerates the
 bindings, and opens a pull request only after the compatibility and native
