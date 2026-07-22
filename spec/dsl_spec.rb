@@ -63,4 +63,34 @@ RSpec.describe "ImGui block DSL" do
       end
     end.to raise_error("failure")
   end
+
+  it "covers popup, tooltip, combo preview, and multi-select scopes" do
+    allow(ImGui::Native).to receive(:igBeginPopupContextItem).and_return(true)
+    allow(ImGui::Native).to receive(:igBeginItemTooltip).and_return(true)
+    allow(ImGui::Native).to receive(:igBeginComboPreview).and_return(true)
+    selection = FFI::MemoryPointer.new(:char, 1)
+    allow(ImGui::Native).to receive(:igBeginMultiSelect).and_return(selection)
+
+    expect(ImGui::Native).to receive(:igEndPopup)
+    expect(ImGui::Native).to receive(:igEndTooltip)
+    expect(ImGui::Native).to receive(:igEndComboPreview)
+    expect(ImGui::Native).to receive(:igEndMultiSelect)
+
+    ImGui.popup_context_item { ImGui.item_tooltip { nil } }
+    ImGui.combo_preview { nil }
+    ImGui.multi_select { |pointer| expect(pointer).to equal(selection) }
+  end
+
+  it "tracks blockless push/pop scopes and detects mismatches" do
+    allow(ImGui::Native).to receive(:igPushItemWidth)
+    allow(ImGui::Native).to receive(:igPushID_Str)
+    allow(ImGui::Native).to receive(:igPopItemWidth)
+    allow(ImGui::Native).to receive(:igPopID)
+
+    ImGui.item_width(120)
+    ImGui.with_id("row")
+    expect { ImGui.pop_item_width }.to raise_error(ImGui::StackError, /expected item_width scope/)
+    ImGui.pop_id
+    ImGui.pop_item_width
+  end
 end

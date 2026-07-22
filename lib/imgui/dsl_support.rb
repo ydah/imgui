@@ -16,6 +16,37 @@ module ImGui
       run_scope(kind, end_function, true, always_close: true, &block)
     end
 
+    def pointer_scope(kind, begin_function, end_function, *arguments, &block)
+      guard_context!
+      pointer = Native.public_send(begin_function, *arguments)
+      opened = !null_pointer?(pointer)
+      return run_scope(kind, end_function, pointer, always_close: false) unless block
+      return unless opened
+
+      begin
+        block.call(pointer)
+      ensure
+        Native.public_send(end_function)
+      end
+    end
+
+    def push_scope(kind, push_function, pop_function, *arguments, pop_arguments: [], &block)
+      guard_context!
+      Native.public_send(push_function, *arguments)
+      run_pushed_scope(kind, pop_function, *pop_arguments, &block)
+    end
+
+    def run_pushed_scope(kind, pop_function, *pop_arguments, &block)
+      unless block
+        scope_stack << [kind, pop_function, pop_arguments]
+        return true
+      end
+
+      block.call
+    ensure
+      Native.public_send(pop_function, *pop_arguments) if block
+    end
+
     def run_scope(kind, end_function, opened, always_close:, &block)
       should_close = always_close || opened
       unless block
@@ -41,7 +72,7 @@ module ImGui
         raise StackError, "expected #{expected_kind} scope, found #{actual}"
       end
 
-      Native.public_send(scope.fetch(1))
+      Native.public_send(scope.fetch(1), *Array(scope[2]))
     end
 
     def scope_stack
