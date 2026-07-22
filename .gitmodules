@@ -1,0 +1,4 @@
+[submodule "generator/vendor/cimgui"]
+	path = generator/vendor/cimgui
+	url = https://github.com/cimgui/cimgui.git
+	branch = docking_inter

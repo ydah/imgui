@@ -1,0 +1,30 @@
+{
+  "igBegin": [
+    {
+      "argsT": [
+        {"name": "name", "type": "const char*"},
+        {"name": "open", "type": "bool*"},
+        {"name": "flags", "type": "ImGuiConfigFlags"}
+      ],
+      "cimguiname": "igBegin",
+      "ov_cimguiname": "igBegin",
+      "ret": "bool"
+    }
+  ],
+  "igGetIO": [
+    {
+      "argsT": [],
+      "cimguiname": "igGetIO",
+      "ov_cimguiname": "igGetIO_Nil",
+      "ret": "ImGuiIO*"
+    }
+  ],
+  "igText": [
+    {
+      "argsT": [{"name": "fmt", "type": "const char*"}],
+      "cimguiname": "igText",
+      "isvararg": true,
+      "ret": "void"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+---
+skip:
+  - igText
+  - igTextColored
+rename:
+  igGetIO_Nil: igGetIO
+varargs_via_preformat:
+  - igSetTooltip
+  - igLabelText

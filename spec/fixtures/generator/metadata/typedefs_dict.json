@@ -1,0 +1,5 @@
+{
+  "ImGuiConfigFlags": "int",
+  "ImGuiID": "unsigned int",
+  "ImGuiIO": "struct ImGuiIO"
+}
