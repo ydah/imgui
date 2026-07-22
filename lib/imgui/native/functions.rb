@@ -499,7 +499,7 @@ module ImGui
     attach_function :ImGui_ImplSDL2_InitForVulkan, [:pointer], :bool
     attach_function :ImGui_ImplSDL2_NewFrame, [], :void
     attach_function :ImGui_ImplSDL2_ProcessEvent, [:pointer], :bool
-    attach_function :ImGui_ImplSDL2_SetGamepadMode, [:pointer, :pointer, :int], :void
+    attach_function :ImGui_ImplSDL2_SetGamepadMode, [:int, :pointer, :int], :void
     attach_function :ImGui_ImplSDL2_Shutdown, [], :void
     attach_function :ImGui_ImplSDL3_InitForD3D, [:pointer], :bool
     attach_function :ImGui_ImplSDL3_InitForMetal, [:pointer], :bool
@@ -510,7 +510,7 @@ module ImGui
     attach_function :ImGui_ImplSDL3_InitForVulkan, [:pointer], :bool
     attach_function :ImGui_ImplSDL3_NewFrame, [], :void
     attach_function :ImGui_ImplSDL3_ProcessEvent, [:pointer], :bool
-    attach_function :ImGui_ImplSDL3_SetGamepadMode, [:pointer, :pointer, :int], :void
+    attach_function :ImGui_ImplSDL3_SetGamepadMode, [:int, :pointer, :int], :void
     attach_function :ImGui_ImplSDL3_Shutdown, [], :void
     attach_function :ImGui_ImplVulkanH_CreateOrResizeWindow, [:pointer, :pointer, :pointer, :pointer, :pointer, :pointer, :int, :int, :pointer], :void
     attach_function :ImGui_ImplVulkanH_DestroyWindow, [:pointer, :pointer, :pointer, :pointer], :void

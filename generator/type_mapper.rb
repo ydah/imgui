@@ -94,7 +94,9 @@ module ImGuiRuby
       end
 
       def enum_type?(type)
-        @enum_types.include?(type) || @typedefs[type] == "int" && type.match?(/Flags|ImGuiCol\z|ImGuiKey\z/)
+        @enum_types.include?(type) ||
+          type.match?(/\AImGui_Impl\w+_(?:Gamepad)?Mode\z/) ||
+          @typedefs[type] == "int" && type.match?(/Flags|ImGuiCol\z|ImGuiKey\z/)
       end
 
       def array_size_from(type)

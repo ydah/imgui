@@ -26,6 +26,40 @@ RSpec.describe ImGui::Backends do
     ImGui::Backends::OpenGL3.render_draw_data(draw_data)
   end
 
+  it "exposes every SDL3 renderer initialization mode" do
+    window = FFI::MemoryPointer.new(:char, 1)
+    renderer = FFI::MemoryPointer.new(:char, 1)
+    expectations = {
+      init_for_vulkan: [:ImGui_ImplSDL3_InitForVulkan, window],
+      init_for_d3d: [:ImGui_ImplSDL3_InitForD3D, window],
+      init_for_metal: [:ImGui_ImplSDL3_InitForMetal, window],
+      init_for_sdl_gpu: [:ImGui_ImplSDL3_InitForSDLGPU, window]
+    }
+
+    expectations.each do |method, (native_method, pointer)|
+      expect(described_class).to receive(:invoke).with("SDL3", native_method, pointer).and_return(true)
+      expect(ImGui::Backends::SDL3.public_send(method, window)).to be(true)
+    end
+
+    expect(described_class).to receive(:invoke)
+      .with("SDL3", :ImGui_ImplSDL3_InitForSDLRenderer, window, renderer)
+      .and_return(true)
+    expect(ImGui::Backends::SDL3.init_for_sdl_renderer(window, renderer)).to be(true)
+  end
+
+  it "retains manual SDL3 gamepad pointers" do
+    gamepad = FFI::MemoryPointer.new(:char, 1)
+    expect(described_class).to receive(:invoke) do |backend, function, mode, array, count|
+      expect(backend).to eq("SDL3")
+      expect(function).to eq(:ImGui_ImplSDL3_SetGamepadMode)
+      expect(mode).to eq(ImGui::Backends::SDL3::GamepadMode::Manual)
+      expect(array.read_pointer).to eq(gamepad)
+      expect(count).to eq(1)
+    end
+
+    ImGui::Backends::SDL3.set_gamepad_mode(:manual, gamepads: [gamepad])
+  end
+
   it "configures WGPU through a runtime function table" do
     function = FFI::MemoryPointer.new(:char, 1)
     allow(described_class).to receive(:invoke).with("WGPU", :imgui_ruby_wgpu_required_function_count).and_return(1)
