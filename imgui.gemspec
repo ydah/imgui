@@ -3,7 +3,7 @@
 require_relative "lib/imgui/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "imgui-ruby"
+  spec.name = "imgui"
   spec.version = ImGui::VERSION
   spec.authors = ["Yudai Takada"]
   spec.email = ["t.yudai92@gmail.com"]
