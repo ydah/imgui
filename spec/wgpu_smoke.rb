@@ -43,7 +43,10 @@ texture = device.create_texture(
   format: format,
   usage: :render_attachment
 )
-view = texture.create_view
+view_handle = WGPU::Native.wgpuTextureCreateView(texture.handle, nil)
+raise "failed to create the WGPU target view" if view_handle.null?
+
+view = WGPU::TextureView.from_handle(view_handle)
 encoder = device.create_command_encoder(label: "imgui-ruby encoder")
 
 2.times do
