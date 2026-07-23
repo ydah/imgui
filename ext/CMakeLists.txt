@@ -97,6 +97,12 @@ endif()
 
 list(REMOVE_DUPLICATES IMGUI_RUBY_SOURCES)
 add_library(cimgui_ruby SHARED ${IMGUI_RUBY_SOURCES})
+set(IMGUI_RUBY_BUILD_CONFIG "${CMAKE_CURRENT_LIST_DIR}/imgui_ruby_build_config.h")
+if(MSVC)
+  target_compile_options(cimgui_ruby PRIVATE "/FI${IMGUI_RUBY_BUILD_CONFIG}")
+else()
+  target_compile_options(cimgui_ruby PRIVATE "-include${IMGUI_RUBY_BUILD_CONFIG}")
+endif()
 target_include_directories(cimgui_ruby PRIVATE
   "${CIMGUI_DIR}"
   "${IMGUI_DIR}"
@@ -109,7 +115,6 @@ target_include_directories(cimgui_ruby PRIVATE
 )
 target_compile_definitions(cimgui_ruby PRIVATE
   IMGUI_DISABLE_OBSOLETE_FUNCTIONS=1
-  IMGUI_IMPL_API=extern\ "C"
   ${IMGUI_RUBY_BACKEND_DEFINITIONS}
 )
 

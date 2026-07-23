@@ -109,134 +109,134 @@ IMGUI_RUBY_EXPORT const char* imgui_ruby_wgpu_bridge_error() {
   return bridge_error.c_str();
 }
 
-IMGUI_RUBY_EXPORT void wgpuBindGroupLayoutRelease(WGPUBindGroupLayout value) {
+WGPU_EXPORT void wgpuBindGroupLayoutRelease(WGPUBindGroupLayout value) {
   wgpuBindGroupLayoutRelease_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuBindGroupRelease(WGPUBindGroup value) {
+WGPU_EXPORT void wgpuBindGroupRelease(WGPUBindGroup value) {
   wgpuBindGroupRelease_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuBufferDestroy(WGPUBuffer value) {
+WGPU_EXPORT void wgpuBufferDestroy(WGPUBuffer value) {
   wgpuBufferDestroy_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuBufferRelease(WGPUBuffer value) {
+WGPU_EXPORT void wgpuBufferRelease(WGPUBuffer value) {
   wgpuBufferRelease_function(value);
 }
-IMGUI_RUBY_EXPORT WGPURenderPassEncoder wgpuCommandEncoderBeginRenderPass(
+WGPU_EXPORT WGPURenderPassEncoder wgpuCommandEncoderBeginRenderPass(
     WGPUCommandEncoder encoder, const WGPURenderPassDescriptor* descriptor) {
   return wgpuCommandEncoderBeginRenderPass_function(encoder, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUBindGroup wgpuDeviceCreateBindGroup(
+WGPU_EXPORT WGPUBindGroup wgpuDeviceCreateBindGroup(
     WGPUDevice device, const WGPUBindGroupDescriptor* descriptor) {
   return wgpuDeviceCreateBindGroup_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUBindGroupLayout wgpuDeviceCreateBindGroupLayout(
+WGPU_EXPORT WGPUBindGroupLayout wgpuDeviceCreateBindGroupLayout(
     WGPUDevice device, const WGPUBindGroupLayoutDescriptor* descriptor) {
   return wgpuDeviceCreateBindGroupLayout_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUBuffer wgpuDeviceCreateBuffer(
+WGPU_EXPORT WGPUBuffer wgpuDeviceCreateBuffer(
     WGPUDevice device, const WGPUBufferDescriptor* descriptor) {
   return wgpuDeviceCreateBuffer_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUPipelineLayout wgpuDeviceCreatePipelineLayout(
+WGPU_EXPORT WGPUPipelineLayout wgpuDeviceCreatePipelineLayout(
     WGPUDevice device, const WGPUPipelineLayoutDescriptor* descriptor) {
   return wgpuDeviceCreatePipelineLayout_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPURenderPipeline wgpuDeviceCreateRenderPipeline(
+WGPU_EXPORT WGPURenderPipeline wgpuDeviceCreateRenderPipeline(
     WGPUDevice device, const WGPURenderPipelineDescriptor* descriptor) {
   return wgpuDeviceCreateRenderPipeline_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUSampler wgpuDeviceCreateSampler(
+WGPU_EXPORT WGPUSampler wgpuDeviceCreateSampler(
     WGPUDevice device, const WGPUSamplerDescriptor* descriptor) {
   return wgpuDeviceCreateSampler_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUShaderModule wgpuDeviceCreateShaderModule(
+WGPU_EXPORT WGPUShaderModule wgpuDeviceCreateShaderModule(
     WGPUDevice device, const WGPUShaderModuleDescriptor* descriptor) {
   return wgpuDeviceCreateShaderModule_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUTexture wgpuDeviceCreateTexture(
+WGPU_EXPORT WGPUTexture wgpuDeviceCreateTexture(
     WGPUDevice device, const WGPUTextureDescriptor* descriptor) {
   return wgpuDeviceCreateTexture_function(device, descriptor);
 }
-IMGUI_RUBY_EXPORT WGPUQueue wgpuDeviceGetQueue(WGPUDevice device) {
+WGPU_EXPORT WGPUQueue wgpuDeviceGetQueue(WGPUDevice device) {
   return wgpuDeviceGetQueue_function(device);
 }
-IMGUI_RUBY_EXPORT void wgpuPipelineLayoutRelease(WGPUPipelineLayout value) {
+WGPU_EXPORT void wgpuPipelineLayoutRelease(WGPUPipelineLayout value) {
   wgpuPipelineLayoutRelease_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuQueueRelease(WGPUQueue value) {
+WGPU_EXPORT void wgpuQueueRelease(WGPUQueue value) {
   wgpuQueueRelease_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuQueueWriteBuffer(
+WGPU_EXPORT void wgpuQueueWriteBuffer(
     WGPUQueue queue, WGPUBuffer buffer, uint64_t offset, const void* data, size_t size) {
   wgpuQueueWriteBuffer_function(queue, buffer, offset, data, size);
 }
-IMGUI_RUBY_EXPORT void wgpuQueueWriteTexture(
+WGPU_EXPORT void wgpuQueueWriteTexture(
     WGPUQueue queue, const WGPUTexelCopyTextureInfo* destination, const void* data,
     size_t data_size, const WGPUTexelCopyBufferLayout* layout, const WGPUExtent3D* size) {
   wgpuQueueWriteTexture_function(queue, destination, data, data_size, layout, size);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderDrawIndexed(
+WGPU_EXPORT void wgpuRenderPassEncoderDrawIndexed(
     WGPURenderPassEncoder pass, uint32_t index_count, uint32_t instance_count,
     uint32_t first_index, int32_t base_vertex, uint32_t first_instance) {
   wgpuRenderPassEncoderDrawIndexed_function(
       pass, index_count, instance_count, first_index, base_vertex, first_instance);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderEnd(WGPURenderPassEncoder pass) {
+WGPU_EXPORT void wgpuRenderPassEncoderEnd(WGPURenderPassEncoder pass) {
   wgpuRenderPassEncoderEnd_function(pass);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderRelease(WGPURenderPassEncoder pass) {
+WGPU_EXPORT void wgpuRenderPassEncoderRelease(WGPURenderPassEncoder pass) {
   wgpuRenderPassEncoderRelease_function(pass);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderSetBindGroup(
+WGPU_EXPORT void wgpuRenderPassEncoderSetBindGroup(
     WGPURenderPassEncoder pass, uint32_t index, WGPUBindGroup group,
     size_t offset_count, const uint32_t* offsets) {
   wgpuRenderPassEncoderSetBindGroup_function(pass, index, group, offset_count, offsets);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderSetBlendConstant(
+WGPU_EXPORT void wgpuRenderPassEncoderSetBlendConstant(
     WGPURenderPassEncoder pass, const WGPUColor* color) {
   wgpuRenderPassEncoderSetBlendConstant_function(pass, color);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderSetIndexBuffer(
+WGPU_EXPORT void wgpuRenderPassEncoderSetIndexBuffer(
     WGPURenderPassEncoder pass, WGPUBuffer buffer, WGPUIndexFormat format,
     uint64_t offset, uint64_t size) {
   wgpuRenderPassEncoderSetIndexBuffer_function(pass, buffer, format, offset, size);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderSetPipeline(
+WGPU_EXPORT void wgpuRenderPassEncoderSetPipeline(
     WGPURenderPassEncoder pass, WGPURenderPipeline pipeline) {
   wgpuRenderPassEncoderSetPipeline_function(pass, pipeline);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderSetScissorRect(
+WGPU_EXPORT void wgpuRenderPassEncoderSetScissorRect(
     WGPURenderPassEncoder pass, uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
   wgpuRenderPassEncoderSetScissorRect_function(pass, x, y, width, height);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderSetVertexBuffer(
+WGPU_EXPORT void wgpuRenderPassEncoderSetVertexBuffer(
     WGPURenderPassEncoder pass, uint32_t slot, WGPUBuffer buffer,
     uint64_t offset, uint64_t size) {
   wgpuRenderPassEncoderSetVertexBuffer_function(pass, slot, buffer, offset, size);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPassEncoderSetViewport(
+WGPU_EXPORT void wgpuRenderPassEncoderSetViewport(
     WGPURenderPassEncoder pass, float x, float y, float width, float height,
     float minimum_depth, float maximum_depth) {
   wgpuRenderPassEncoderSetViewport_function(
       pass, x, y, width, height, minimum_depth, maximum_depth);
 }
-IMGUI_RUBY_EXPORT void wgpuRenderPipelineRelease(WGPURenderPipeline value) {
+WGPU_EXPORT void wgpuRenderPipelineRelease(WGPURenderPipeline value) {
   wgpuRenderPipelineRelease_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuSamplerRelease(WGPUSampler value) {
+WGPU_EXPORT void wgpuSamplerRelease(WGPUSampler value) {
   wgpuSamplerRelease_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuShaderModuleRelease(WGPUShaderModule value) {
+WGPU_EXPORT void wgpuShaderModuleRelease(WGPUShaderModule value) {
   wgpuShaderModuleRelease_function(value);
 }
-IMGUI_RUBY_EXPORT WGPUTextureView wgpuTextureCreateView(
+WGPU_EXPORT WGPUTextureView wgpuTextureCreateView(
     WGPUTexture texture, const WGPUTextureViewDescriptor* descriptor) {
   return wgpuTextureCreateView_function(texture, descriptor);
 }
-IMGUI_RUBY_EXPORT void wgpuTextureRelease(WGPUTexture value) {
+WGPU_EXPORT void wgpuTextureRelease(WGPUTexture value) {
   wgpuTextureRelease_function(value);
 }
-IMGUI_RUBY_EXPORT void wgpuTextureViewRelease(WGPUTextureView value) {
+WGPU_EXPORT void wgpuTextureViewRelease(WGPUTextureView value) {
   wgpuTextureViewRelease_function(value);
 }
 
