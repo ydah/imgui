@@ -89,10 +89,26 @@ module ImGuiRuby
             __send__(:define_generated_method,
                 :#{ruby_name},
                 :#{renamed_native_name(definition)},
-                #{arguments.inspect},
-                #{defaults.inspect}
+                #{ruby_literal(arguments)},
+                #{ruby_literal(defaults)}
               )
         RUBY
+      end
+
+      def ruby_literal(value)
+        case value
+        when Array
+          "[#{value.map { |item| ruby_literal(item) }.join(", ")}]"
+        when Hash
+          entries = value.map do |key, item|
+            "#{ruby_literal(key)} => #{ruby_literal(item)}"
+          end
+          "{#{entries.join(", ")}}"
+        when String, Integer, Float, TrueClass, FalseClass, NilClass
+          value.inspect
+        else
+          raise ArgumentError, "unsupported generated literal: #{value.class}"
+        end
       end
 
       def renamed_native_name(definition)

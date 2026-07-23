@@ -42,6 +42,22 @@ end
 RSpec.describe ImGuiRuby::Generator::ApiEmitter do
   let(:fixture_root) { File.expand_path("fixtures/generator", __dir__) }
 
+  it "renders generated literals without relying on Hash#inspect formatting" do
+    emitter = described_class.allocate
+    value = {
+      "flags" => 0,
+      "label" => "demo",
+      "size" => [1.0, 2.0],
+      "enabled" => true,
+      "callback" => nil
+    }
+
+    expect(emitter.__send__(:ruby_literal, value)).to eq(
+      '{"flags" => 0, "label" => "demo", "size" => [1.0, 2.0], ' \
+      '"enabled" => true, "callback" => nil}'
+    )
+  end
+
   it "omits lifecycle and varargs functions from the generated Ruby API" do
     Dir.mktmpdir("imgui-api-generator") do |output|
       output_path = File.join(output, "api_generated.rb")
