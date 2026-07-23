@@ -70,4 +70,4 @@
 #define glfwSwapInterval(...) IMGUI_RUBY_GLFW(glfwSwapInterval, __VA_ARGS__)
 #define glfwWindowHint(...) IMGUI_RUBY_GLFW(glfwWindowHint, __VA_ARGS__)
 
-#include "../generator/vendor/cimgui/imgui/backends/imgui_impl_glfw.cpp"
+#include "imgui_impl_glfw.cpp"

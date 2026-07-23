@@ -5,7 +5,7 @@ require "rspec/core/rake_task"
 require "rbconfig"
 
 desc "Generate FFI declarations from cimgui metadata"
-task :generate do
+task generate: "vendor:fetch" do
   ruby File.expand_path("generator/generate.rb", __dir__)
 end
 
@@ -13,12 +13,29 @@ RSpec::Core::RakeTask.new(:spec)
 
 task default: :spec
 
+namespace :vendor do
+  desc "Fetch the pinned native dependencies when the cache is missing"
+  task :fetch do
+    ruby File.expand_path("generator/update_vendor.rb", __dir__)
+  end
+
+  desc "Verify the cached native dependency snapshots"
+  task :verify do
+    ruby File.expand_path("generator/update_vendor.rb", __dir__), "--verify"
+  end
+
+  desc "Update cached native dependencies from their configured branches"
+  task :update do
+    ruby File.expand_path("generator/update_vendor.rb", __dir__), "--latest"
+  end
+end
+
 namespace :native do
   build_root = File.expand_path("tmp/native-build", __dir__)
   install_root = File.expand_path("tmp/native-install", __dir__)
 
-  desc "Build the bundled cimgui library"
-  task :build do
+  desc "Build the cached cimgui library"
+  task build: "vendor:fetch" do
     require_relative "ext/build_cimgui"
 
     ImGuiRuby::NativeBuilder.new(

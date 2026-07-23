@@ -1,0 +1,88 @@
+---
+schema: 1
+sources:
+  cimgui:
+    repository: https://github.com/cimgui/cimgui.git
+    ref: docking_inter
+    revision: 140d107be52cf2cfe66aa2cb859fd8e07f9f6bf5
+    checksum: sha256:3a63513f59a355493c1faaa77667ac4f513754b9a622aa15b25ebd524c4d3e54
+    destination: cimgui
+    files:
+      - LICENSE
+      - cimconfig.h
+      - cimgui.cpp
+      - cimgui.h
+      - cimgui_impl.cpp
+      - cimgui_impl.h
+      - generator/output/definitions.json
+      - generator/output/impl_definitions.json
+      - generator/output/structs_and_enums.json
+      - generator/output/typedefs_dict.json
+  imgui:
+    repository: https://github.com/ocornut/imgui.git
+    revision: 126d004f9e1eef062bf4b044b3b2faaf58d48c51
+    checksum: sha256:dd1328bdf2f47e9f664a73996fbba2d85b23b926641964a2553b08a8e00cb30b
+    parent:
+      source: cimgui
+      path: imgui
+    destination: cimgui/imgui
+    files:
+      - LICENSE.txt
+      - "*.cpp"
+      - "*.h"
+      - backends/imgui_impl_glfw.cpp
+      - backends/imgui_impl_glfw.h
+      - backends/imgui_impl_opengl3.cpp
+      - backends/imgui_impl_opengl3.h
+      - backends/imgui_impl_opengl3_loader.h
+      - backends/imgui_impl_sdl3.cpp
+      - backends/imgui_impl_sdl3.h
+      - backends/imgui_impl_wgpu.cpp
+      - backends/imgui_impl_wgpu.h
+      - examples/libs/glfw/include/GLFW/*.h
+  cimplot:
+    repository: https://github.com/cimgui/cimplot.git
+    ref: master
+    revision: 381ed68cc0688f16d027d67edc3bc060afa4dde9
+    checksum: sha256:50bdbdef021bf080d189c14a11916c6c068fafeab661d780bf422a56a610faa0
+    destination: cimplot
+    files:
+      - LICENSE
+      - cimplot.cpp
+      - cimplot.h
+      - generator/output/definitions.json
+      - generator/output/structs_and_enums.json
+      - generator/output/typedefs_dict.json
+  implot:
+    repository: https://github.com/epezent/implot.git
+    revision: 47522f47054d33178e7defa780042bd2a06b09f9
+    checksum: sha256:88d83afafceb919b4171b3308716188d34116b32811f6eba0e9df7d9cfad42dc
+    parent:
+      source: cimplot
+      path: implot
+    destination: cimplot/implot
+    files:
+      - LICENSE
+      - implot.cpp
+      - implot_demo.cpp
+      - implot.h
+      - implot_internal.h
+      - implot_items.cpp
+  sdl:
+    repository: https://github.com/libsdl-org/SDL.git
+    ref: release-3.2.x
+    revision: f6864924f76e1a0b4abaefc76ae2ed22b1a8916e
+    checksum: sha256:843dafeeb13f7ce22130cf234a6ca48d40a43bb19d7f56851419fc9aee1c8165
+    destination: sdl
+    files:
+      - LICENSE.txt
+      - include/SDL3/*.h
+  webgpu:
+    repository: https://github.com/webgpu-native/webgpu-headers.git
+    ref: main
+    revision: bac520839ff5ed2e2b648ed540bd9ec45edbccbc
+    checksum: sha256:22f9cfe67c2da486351eea6f0504a4aa80e3b17c1d42ea7b0929eb2247b8b81b
+    destination: webgpu
+    files:
+      - LICENSE
+      - webgpu.h

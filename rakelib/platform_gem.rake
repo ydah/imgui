@@ -29,9 +29,7 @@ namespace :gem do
                                local_platform
                              end
     specification.extensions = []
-    specification.files = specification.files.reject do |file|
-      file.start_with?("ext/", "generator/vendor/") || file == ".gitmodules"
-    end
+    specification.files = specification.files.reject { |file| file.start_with?("ext/") }
 
     platform = "#{FFI::Platform::ARCH}-#{FFI::Platform::OS}"
     native_file = File.join("vendor", platform, File.basename(library))

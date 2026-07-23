@@ -8,7 +8,7 @@ require_relative "api_emitter"
 
 root = File.expand_path("..", __dir__)
 options = {
-  metadata: File.join(__dir__, "vendor", "cimgui", "generator", "output"),
+  metadata: File.join(root, "tmp", "vendor", "cimgui", "generator", "output"),
   output: File.join(root, "lib", "imgui", "native"),
   overrides: File.join(__dir__, "overrides.yml")
 }
@@ -33,7 +33,7 @@ ImGuiRuby::Generator::ApiEmitter.new(
   overrides_path: options.fetch(:overrides)
 ).generate!
 
-plot_metadata = File.join(__dir__, "vendor", "cimplot", "generator", "output")
+plot_metadata = File.join(root, "tmp", "vendor", "cimplot", "generator", "output")
 if File.directory?(plot_metadata)
   ImGuiRuby::Generator::Emitter.new(
     metadata_dir: plot_metadata,

@@ -12,14 +12,23 @@ option(IMGUI_RUBY_WITH_IMPLOT "Compile the bundled ImPlot extension" ON)
 option(IMGUI_RUBY_WITH_WGPU "Compile the Dear ImGui WebGPU backend" OFF)
 
 get_filename_component(IMGUI_RUBY_ROOT "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
-set(CIMGUI_DIR "${IMGUI_RUBY_ROOT}/generator/vendor/cimgui")
+set(IMGUI_RUBY_VENDOR_DIR "" CACHE PATH "Directory containing native dependency sources")
+if(NOT IMGUI_RUBY_VENDOR_DIR)
+  if(EXISTS "${IMGUI_RUBY_ROOT}/vendor-src")
+    set(IMGUI_RUBY_VENDOR_DIR "${IMGUI_RUBY_ROOT}/vendor-src")
+  else()
+    set(IMGUI_RUBY_VENDOR_DIR "${IMGUI_RUBY_ROOT}/tmp/vendor")
+  endif()
+endif()
+
+set(CIMGUI_DIR "${IMGUI_RUBY_VENDOR_DIR}/cimgui")
 set(IMGUI_DIR "${CIMGUI_DIR}/imgui")
-set(CIMPLOT_DIR "${IMGUI_RUBY_ROOT}/generator/vendor/cimplot")
-set(SDL_DIR "${IMGUI_RUBY_ROOT}/generator/vendor/sdl")
-set(WEBGPU_HEADERS_DIR "${IMGUI_RUBY_ROOT}/generator/vendor")
+set(CIMPLOT_DIR "${IMGUI_RUBY_VENDOR_DIR}/cimplot")
+set(SDL_DIR "${IMGUI_RUBY_VENDOR_DIR}/sdl")
+set(WEBGPU_HEADERS_DIR "${IMGUI_RUBY_VENDOR_DIR}")
 
 if(NOT EXISTS "${CIMGUI_DIR}/cimgui.cpp")
-  message(FATAL_ERROR "cimgui submodule is missing; run git submodule update --init --recursive")
+  message(FATAL_ERROR "cimgui source is missing; run bundle exec rake vendor:fetch")
 endif()
 
 set(IMGUI_RUBY_SOURCES
@@ -34,7 +43,7 @@ set(IMGUI_RUBY_SOURCES
 set(IMGUI_RUBY_BACKEND_DEFINITIONS)
 if(IMGUI_RUBY_WITH_IMPLOT)
   if(NOT EXISTS "${CIMPLOT_DIR}/cimplot.cpp")
-    message(FATAL_ERROR "cimplot submodule is missing; run git submodule update --init --recursive")
+    message(FATAL_ERROR "cimplot source is missing; run bundle exec rake vendor:fetch")
   endif()
   list(APPEND IMGUI_RUBY_SOURCES
     "${CIMPLOT_DIR}/cimplot.cpp"
@@ -64,7 +73,7 @@ endif()
 
 if(IMGUI_RUBY_WITH_SDL3)
   if(NOT EXISTS "${SDL_DIR}/include/SDL3/SDL.h")
-    message(FATAL_ERROR "SDL submodule is missing; run git submodule update --init --recursive")
+    message(FATAL_ERROR "SDL headers are missing; run bundle exec rake vendor:fetch")
   endif()
   list(APPEND IMGUI_RUBY_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/backend_function_bridge.cpp"
@@ -76,7 +85,7 @@ endif()
 
 if(IMGUI_RUBY_WITH_WGPU)
   if(NOT EXISTS "${WEBGPU_HEADERS_DIR}/webgpu/webgpu.h")
-    message(FATAL_ERROR "WebGPU headers submodule is missing; run git submodule update --init --recursive")
+    message(FATAL_ERROR "WebGPU headers are missing; run bundle exec rake vendor:fetch")
   endif()
   list(APPEND IMGUI_RUBY_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/imgui_ruby_wgpu.cpp"

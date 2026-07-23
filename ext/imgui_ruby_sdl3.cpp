@@ -67,4 +67,4 @@
 #define SDL_free(...) IMGUI_RUBY_SDL3(SDL_free, __VA_ARGS__)
 #define SDL_strdup(...) IMGUI_RUBY_SDL3(SDL_strdup, __VA_ARGS__)
 
-#include "../generator/vendor/cimgui/imgui/backends/imgui_impl_sdl3.cpp"
+#include "imgui_impl_sdl3.cpp"
