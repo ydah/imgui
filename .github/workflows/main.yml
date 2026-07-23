@@ -55,7 +55,21 @@ jobs:
         if: matrix.ruby == '4.0' && runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install --yes libglfw3 libgl1-mesa-dev libvulkan1 mesa-vulkan-drivers xvfb
+          sudo apt-get install --yes \
+            libglfw3 \
+            libgl1-mesa-dev \
+            libvulkan1 \
+            libx11-dev \
+            libxext-dev \
+            libxrandr-dev \
+            libxcursor-dev \
+            libxfixes-dev \
+            libxi-dev \
+            libxss-dev \
+            libxtst-dev \
+            libxkbcommon-dev \
+            mesa-vulkan-drivers \
+            xvfb
           gem install glfw-ruby sdl3 wgpu --no-document
           ruby generator/update_vendor.rb --checkout sdl:tmp/sdl-source
           cmake -S tmp/sdl-source -B tmp/sdl-build -DSDL_SHARED=ON -DSDL_STATIC=OFF -DSDL_TEST_LIBRARY=OFF
