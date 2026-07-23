@@ -12,4 +12,14 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.after do
+    ImGui.enforce_thread_safety!
+
+    # Most unit specs replace native contexts with short-lived FFI pointers, so
+    # they cannot exercise destroy_context's normal registry cleanup.
+    %i[context_threads io_views style_views].each do |registry|
+      ImGui.__send__(registry).clear
+    end
+  end
 end

@@ -7,10 +7,6 @@ RSpec.describe "ImGui layer 2 API" do
     allow(ImGui::Native).to receive(:igGetCurrentContext).and_return(context)
   end
 
-  after do
-    ImGui.enforce_thread_safety!
-  end
-
   it "returns changed and the updated scalar for immediate values" do
     allow(ImGui::Native).to receive(:igSliderFloat) do |_label, pointer, *_arguments|
       pointer.write_float(2.5)
