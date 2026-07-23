@@ -25,11 +25,13 @@ namespace :gem do
     specification.platform = if %w[darwin linux].include?(local_platform.os)
                                cpu = local_platform.cpu == "aarch64" ? "arm64" : local_platform.cpu
                                Gem::Platform.new("#{cpu}-#{local_platform.os}")
-                             else
-                               local_platform
-                             end
+    else
+      local_platform
+    end
     specification.extensions = []
-    specification.files = specification.files.reject { |file| file.start_with?("ext/") }
+    specification.files = specification.files.reject do |file|
+      file.start_with?("ext/", "vendor-src/")
+    end
 
     platform = "#{FFI::Platform::ARCH}-#{FFI::Platform::OS}"
     native_file = File.join("vendor", platform, File.basename(library))

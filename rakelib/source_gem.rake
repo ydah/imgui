@@ -13,7 +13,7 @@ module ImGuiRuby
     end
 
     def build!
-      specification = Gem::Specification.load(File.join(@root, "imgui.gemspec"))
+      specification = Gem::Specification.load(File.join(@root, "imgui.gemspec")).dup
       project_files = specification.files
       native_files = native_source_files
       specification.files = (project_files + native_files.keys).sort
