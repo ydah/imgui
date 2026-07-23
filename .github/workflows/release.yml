@@ -13,23 +13,20 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
         with:
           ruby-version: "4.0"
-          bundler-cache: true
-      - uses: actions/cache@v4
-        with:
-          path: tmp/vendor
-          key: native-${{ runner.os }}-${{ hashFiles('generator/native-dependencies.yml') }}
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
       - name: Fetch native dependencies
         run: bundle exec rake vendor:fetch
       - name: Verify tag version
         run: test "v$(ruby -Ilib -rimgui/version -e 'print ImGui::VERSION')" = "$GITHUB_REF_NAME"
       - run: bundle exec rake build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: gem-source
           path: pkg/*.gem
@@ -53,21 +50,18 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
         with:
           ruby-version: "4.0"
-          bundler-cache: true
-      - uses: actions/cache@v4
-        with:
-          path: tmp/vendor
-          key: native-${{ runner.os }}-${{ hashFiles('generator/native-dependencies.yml') }}
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
       - name: Fetch native dependencies
         run: bundle exec rake vendor:fetch
       - run: bundle exec rake gem:platform
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: gem-${{ matrix.artifact }}
           path: pkg/*.gem
@@ -80,13 +74,13 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
         with:
           ruby-version: "4.0"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           pattern: gem-*
           path: pkg
