@@ -20,13 +20,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          submodules: recursive
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "4.0"
           bundler-cache: true
-      - name: Update submodules
-        run: git submodule update --remote --recursive
+      - name: Update native dependency cache and lock
+        run: bundle exec rake vendor:update
       - name: Regenerate bindings
         run: bundle exec rake generate
       - name: Run compatibility and native tests
@@ -54,11 +53,11 @@ jobs:
           if gh pr view "$UPDATE_BRANCH" >/dev/null 2>&1; then
             gh pr edit "$UPDATE_BRANCH" \
               --title "Update native dependencies" \
-              --body "Updates pinned native submodules, regenerates bindings, and passes the compatibility and native suites."
+              --body "Updates pinned native dependencies and checksums, regenerates bindings, and passes the compatibility and native suites."
           else
             gh pr create \
               --base main \
               --head "$UPDATE_BRANCH" \
               --title "Update native dependencies" \
-              --body "Updates pinned native submodules, regenerates bindings, and passes the compatibility and native suites."
+              --body "Updates pinned native dependencies and checksums, regenerates bindings, and passes the compatibility and native suites."
           fi

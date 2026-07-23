@@ -228,12 +228,15 @@ Line, scatter, stairs, bars, and histogram helpers accept Ruby numeric arrays.
 
 ## Development
 
-Initialize the pinned cimgui and Dear ImGui submodules, install dependencies,
-then run the Ruby and native suites:
+Native dependency sources are not stored in Git. Their revisions and SHA-256
+checksums are pinned in `generator/native-dependencies.yml`; the first native
+build or generation downloads a minimal snapshot into the ignored `tmp/vendor`
+cache. Install dependencies, fetch the cache, then run the suites:
 
 ```bash
-git submodule update --init --recursive
 bundle install
+bundle exec rake vendor:fetch
+bundle exec rake vendor:verify
 bundle exec rake
 bundle exec rake native:spec
 bundle exec rake native:audit
@@ -245,14 +248,21 @@ Regenerate all committed Native files and the snake_case Layer 2 surface with:
 bundle exec rake generate
 ```
 
+`vendor:fetch` uses a valid cache without network access and otherwise downloads
+the pinned revisions. `vendor:verify` performs an offline file and checksum
+audit, while `vendor:update` advances the configured upstream branches and
+updates their checksums.
+
 `native:spec` builds cimgui and executes two real headless frames.
 `native:audit` builds every supported backend and attaches all generated
 symbols. `native:integration` runs GLFW/OpenGL3, SDL3, and WGPU integration
 frames when the optional gems and system libraries are installed. To build the
 source gem use `bundle exec rake build`; `bundle exec rake gem:platform`
-builds a gem containing the native library for the current platform.
+builds a gem containing the native library for the current platform. Source gem
+packaging stages only the native files needed for an offline extension build;
+platform gems contain no native source snapshots.
 
-The weekly update workflow advances the pinned submodules, regenerates the
+The weekly update workflow refreshes the dependency cache and lock data, regenerates the
 bindings, and opens a pull request only after the compatibility and native
 suites pass. Tagged releases build all platform gems and use RubyGems trusted
 publishing; repository maintainers must register `release.yml` and the
